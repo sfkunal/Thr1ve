@@ -34,94 +34,76 @@ class _AnswersState extends State<Answers> {
       children: [
         Container(
           padding: EdgeInsets.only(
-            left: 20,
-            right: 20,
-            top: 200,
-            bottom: 50,
+            left: 0,
+            right: 0,
+            top: 100,
+            bottom: 100,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              FlatButton(
+              IconButton(
+                iconSize: 60,
                 onPressed: () {
                   setState(() {
                     setColors('terrible');
                   });
                 },
                 color: color_map['terrible'],
-                padding: EdgeInsets.all(25),
-                shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(30.0)),
-                child: Image.asset(
+                icon: Image.asset(
                   'images/terrible.png',
-                  scale: 2,
                 ),
               ),
-              FlatButton(
+              IconButton(
+                iconSize: 60,
                 onPressed: () {
                   setState(() {
                     setColors('sad');
                   });
                 },
                 color: color_map['sad'],
-                padding: EdgeInsets.all(25),
-                shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(30.0)),
-                child: Image.asset(
+                icon: Image.asset(
                   'images/sad.png',
-                  scale: 2,
                 ),
               ),
-              FlatButton(
+              IconButton(
+                iconSize: 60,
                 onPressed: () {
                   setState(() {
                     setColors('neutral');
                   });
                 },
                 color: color_map['neutral'],
-                padding: EdgeInsets.all(25),
-                shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(30.0)),
-                child: Image.asset(
+                icon: Image.asset(
                   'images/neutral.png',
-                  scale: 1.45,
                 ),
               ),
-              FlatButton(
+              IconButton(
+                iconSize: 60,
                 onPressed: () {
                   setState(() {
                     setColors('happy');
                   });
                 },
                 color: color_map['happy'],
-                padding: EdgeInsets.all(25),
-                shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(30.0)),
-                child: Image.asset(
+                icon: Image.asset(
                   'images/happy.png',
-                  scale: 2,
                 ),
               ),
-              FlatButton(
+              IconButton(
+                iconSize: 60,
                 onPressed: () {
                   setState(() {
                     setColors('great');
                   });
                 },
                 color: color_map['great'],
-                padding: EdgeInsets.all(25),
-                shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(30.0)),
-                child: Image.asset(
+                icon: Image.asset(
                   'images/great.png',
-                  scale: 2,
                 ),
               ),
             ],
           ),
-        ),
-        SizedBox(
-          height: 50,
         ),
         Container(
           child: Text(

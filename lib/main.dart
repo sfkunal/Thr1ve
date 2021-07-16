@@ -2,6 +2,14 @@ import 'package:flutter/material.dart';
 import './questions.dart';
 import './statistics.dart';
 
+// to pull:
+// git pull (do this everytime you switch devices)
+
+// to push:
+// git add *
+// git commit -m 'message'
+// git push
+
 void main() {
   runApp(MyApp());
 }
@@ -45,12 +53,12 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           children: [
-            SizedBox(height: 100),
+            SizedBox(height: 25),
             Text(
               'You are doing well!',
               textScaleFactor: 2.7,
             ),
-            SizedBox(height: 200),
+            SizedBox(height: 5),
             Image.asset(
               'images/base_tree2.png',
             )
