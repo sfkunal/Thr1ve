@@ -10,7 +10,7 @@ class Questions extends StatefulWidget {
 class _QuestionsState extends State<Questions> {
   var _questionMap = {
     'How energized did you wake up this morning?': 'Physical',
-    'How supported did you feel by coaches?': 'Enjoyment',
+    'How supported do you feel by coaches?': 'Enjoyment',
     'How easily are you able to consider constructive feedback?': 'Performance'
   };
   @override
@@ -26,7 +26,7 @@ class _QuestionsState extends State<Questions> {
       ),
       body: Column(children: [
         Question(
-          'How supported did you feel by coaches?',
+          'How supported do you feel by coaches?',
         ),
         Answers(),
       ]),

@@ -28,6 +28,8 @@ class _AnswersState extends State<Answers> {
     encourage = encourage_map[name].toString();
   }
 
+  var rating = -1.0;
+
   @override
   Widget build(BuildContext context) {
     return Column(
