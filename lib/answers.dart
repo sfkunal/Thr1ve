@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import './questions.dart';
 
 class Answers extends StatefulWidget {
   @override
@@ -15,21 +16,12 @@ class _AnswersState extends State<Answers> {
     'happy': 'Hard work pays off. Great job.',
     'great': 'Excellent. You are on the path to greatness.',
   };
-  //todo alternate from a word bank of encouragement
-  var color_map = {
-    'terrible': Colors.white,
-    'sad': Colors.white,
-    'neutral': Colors.white,
-    'happy': Colors.white,
-    'great': Colors.white,
-  };
-  void setColors(String name) {
-    color_map.forEach((k, v) => color_map[k] = Colors.white);
-    color_map[name] = Colors.blue.shade100;
+  void encourageText(String name) {
     encourage = encourage_map[name].toString();
   }
 
-  var rating = 1.0;
+  var rating = 5.0;
+  QuestionsState s = new QuestionsState();
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +32,7 @@ class _AnswersState extends State<Answers> {
             left: 0,
             right: 0,
             top: 100,
-            bottom: 100,
+            bottom: 90,
           ),
           child: Column(
             children: [
@@ -49,76 +41,90 @@ class _AnswersState extends State<Answers> {
                 children: [
                   IconButton(
                     iconSize: 60,
-                    onPressed: () {
-                      setState(() {
-                        setColors('terrible');
-                      });
-                    },
-                    color: color_map['terrible'],
+                    onPressed: () {},
                     icon: Image.asset(
                       'images/terrible.png',
                     ),
                   ),
                   IconButton(
                     iconSize: 60,
-                    onPressed: () {
-                      setState(() {
-                        setColors('sad');
-                      });
-                    },
-                    color: color_map['sad'],
+                    onPressed: () {},
                     icon: Image.asset(
                       'images/sad.png',
                     ),
                   ),
                   IconButton(
                     iconSize: 60,
-                    onPressed: () {
-                      setState(() {
-                        setColors('neutral');
-                      });
-                    },
-                    color: color_map['neutral'],
+                    onPressed: () {},
                     icon: Image.asset(
                       'images/neutral.png',
                     ),
                   ),
                   IconButton(
                     iconSize: 60,
-                    onPressed: () {
-                      setState(() {
-                        setColors('happy');
-                      });
-                    },
-                    color: color_map['happy'],
+                    onPressed: () {},
                     icon: Image.asset(
                       'images/happy.png',
                     ),
                   ),
                   IconButton(
                     iconSize: 60,
-                    onPressed: () {
-                      setState(() {
-                        setColors('great');
-                      });
-                    },
-                    color: color_map['great'],
+                    onPressed: () {},
                     icon: Image.asset(
                       'images/great.png',
                     ),
                   ),
                 ],
               ),
-              CupertinoSlider(
-                value: rating,
-                onChanged: (newRating) {
-                  setState(() => rating = newRating);
-                  // print(rating);
+              SizedBox(
+                width: 370,
+                height: 100,
+                child: CupertinoSlider(
+                  value: rating,
+                  onChanged: (newRating) {
+                    setState(() => rating = newRating);
+                    setState(() {
+                      encourageText('neutral');
+                    });
+                    if (rating == 0) {
+                      setState(() {
+                        encourageText('terrible');
+                      });
+                    }
+                    if (rating == 2.5) {
+                      setState(() {
+                        encourageText('sad');
+                      });
+                    }
+                    if (rating == 5.0) {
+                      setState(() {
+                        encourageText('neutral');
+                      });
+                    }
+                    if (rating == 7.5) {
+                      setState(() {
+                        encourageText('happy');
+                      });
+                    }
+                    if (rating == 10.0) {
+                      setState(() {
+                        encourageText('great');
+                      });
+                    }
+                    // print(rating);
+                  },
+                  min: 0,
+                  max: 10,
+                  divisions: 4,
+                  thumbColor: Colors.black,
+                ),
+              ),
+              CupertinoButton(
+                child: Text('Next'),
+                color: Colors.blueGrey,
+                onPressed: () {
+                  s.buttonPressed();
                 },
-                min: 0,
-                max: 10,
-                divisions: 10,
-                thumbColor: Colors.blue.shade100,
               ),
             ],
           ),

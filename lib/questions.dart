@@ -4,15 +4,35 @@ import './question.dart';
 
 class Questions extends StatefulWidget {
   @override
-  _QuestionsState createState() => _QuestionsState();
+  QuestionsState createState() => QuestionsState();
 }
 
-class _QuestionsState extends State<Questions> {
+class QuestionsState extends State<Questions> {
+  var answerCount = 0;
+  var maxQuestions = 4;
   var _questionMap = {
     'How energized did you wake up this morning?': 'Physical',
     'How supported do you feel by coaches?': 'Enjoyment',
-    'How easily are you able to consider constructive feedback?': 'Performance'
+    'How easily are you able to consider constructive feedback?': 'Performance',
+    'question 4': 'Physical',
+    'question 5': 'Physical',
   };
+  var _questionList = [
+    'How energized did you wake up this morning?',
+    'How supported do you feel by coaches?',
+    'How easily are you able to consider constructive feedback?',
+    'question 4',
+    'question 5'
+  ];
+
+  void buttonPressed() {
+    if (answerCount > 4) {
+      answerCount = 0;
+    }
+    // print(answerCount);
+    answerCount++;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +46,7 @@ class _QuestionsState extends State<Questions> {
       ),
       body: Column(children: [
         Question(
-          'How supported do you feel by coaches?',
+          _questionList[answerCount],
         ),
         Answers(),
       ]),
