@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import './questions.dart';
 import './statistics.dart';
+import './LineGraph.dart';
 
 // to pull:
 // git pull (do this everytime you switch devices)

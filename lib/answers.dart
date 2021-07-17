@@ -77,7 +77,7 @@ class _AnswersState extends State<Answers> {
                 ],
               ),
               Text(
-                rating.toString(),
+                rating.toInt().toString(),
                 textScaleFactor: 3,
               ),
               SizedBox(
@@ -90,27 +90,27 @@ class _AnswersState extends State<Answers> {
                     setState(() {
                       encourageText('neutral');
                     });
-                    if (rating == 0) {
+                    if (rating > 0) {
                       setState(() {
                         encourageText('terrible');
                       });
                     }
-                    if (rating == 2.5) {
+                    if (rating > 2) {
                       setState(() {
                         encourageText('sad');
                       });
                     }
-                    if (rating == 5.0) {
+                    if (rating > 4) {
                       setState(() {
                         encourageText('neutral');
                       });
                     }
-                    if (rating == 7.5) {
+                    if (rating > 6) {
                       setState(() {
                         encourageText('happy');
                       });
                     }
-                    if (rating == 10.0) {
+                    if (rating > 8) {
                       setState(() {
                         encourageText('great');
                       });
@@ -119,7 +119,7 @@ class _AnswersState extends State<Answers> {
                   },
                   min: 0,
                   max: 10,
-                  divisions: 4,
+                  divisions: 10,
                   thumbColor: Colors.black,
                 ),
               ),

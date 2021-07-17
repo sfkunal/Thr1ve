@@ -1,3 +1,4 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -21,16 +22,33 @@ class _StatisticsState extends State<Statistics> {
       body: Center(
         child: Column(
           children: [
-            CupertinoSlider(
-              value: rating,
-              onChanged: (newRating) {
-                setState(() => rating = newRating);
-                // print(rating);
-              },
-              min: 0,
-              max: 10,
-              divisions: 10,
-              thumbColor: Colors.blue.shade100,
+            Container(
+              padding: EdgeInsets.only(
+                left: 0,
+                right: 0,
+                top: 15,
+                bottom: 90,
+              ),
+              child: Column(
+                children: [
+                  Text(
+                    'Overall Graph',
+                    textScaleFactor: 1.4,
+                  ),
+                  SizedBox(
+                    width: 300,
+                    height: 300,
+                    child: LineChart(
+                      LineChartData(
+                          // read about it in the LineChartData section
+                          ),
+                      swapAnimationDuration:
+                          Duration(milliseconds: 150), // Optional
+                      swapAnimationCurve: Curves.linear, // Optional
+                    ),
+                  )
+                ],
+              ),
             )
           ],
         ),
