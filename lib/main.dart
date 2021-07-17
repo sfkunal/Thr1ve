@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
       ),
-      home: MyHomePage(title: 'Thr1ve Home Page'),
+      home: MyHomePage(title: 'Home Thr1ve'),
     );
   }
 }

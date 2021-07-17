@@ -10,11 +10,11 @@ class Answers extends StatefulWidget {
 class _AnswersState extends State<Answers> {
   String encourage = '';
   Map<String, String> encourage_map = {
-    'terrible': 'Hopefully tomorrow brings better performance!',
-    'sad': 'Don\'t stress. Everyone has off days.',
-    'neutral': 'An average performance.',
+    'terrible': 'Uh-oh! Make this a priority in your training!',
+    'sad': 'No worries. Focus on improving slightly every day.',
+    'neutral': 'Don\'t stress. Everyone has off days!',
     'happy': 'Hard work pays off. Great job.',
-    'great': 'Excellent. You are on the path to greatness.',
+    'great': 'Excellent. You\'re on the path to greatness.',
   };
   void encourageText(String name) {
     encourage = encourage_map[name].toString();
@@ -31,7 +31,7 @@ class _AnswersState extends State<Answers> {
           padding: EdgeInsets.only(
             left: 0,
             right: 0,
-            top: 100,
+            top: 50,
             bottom: 90,
           ),
           child: Column(
@@ -54,7 +54,7 @@ class _AnswersState extends State<Answers> {
                     ),
                   ),
                   IconButton(
-                    iconSize: 60,
+                    iconSize: 68,
                     onPressed: () {},
                     icon: Image.asset(
                       'images/neutral.png',
@@ -75,6 +75,10 @@ class _AnswersState extends State<Answers> {
                     ),
                   ),
                 ],
+              ),
+              Text(
+                rating.toString(),
+                textScaleFactor: 3,
               ),
               SizedBox(
                 width: 370,
@@ -124,6 +128,7 @@ class _AnswersState extends State<Answers> {
                 color: Colors.blueGrey,
                 onPressed: () {
                   s.buttonPressed();
+                  // s.build(context);
                 },
               ),
             ],
