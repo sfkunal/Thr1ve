@@ -21,13 +21,16 @@ class _StatisticsState extends State<Statistics> {
       body: Center(
         child: Column(
           children: [
-            Slider(
+            CupertinoSlider(
               value: rating,
               onChanged: (newRating) {
                 setState(() => rating = newRating);
                 // print(rating);
               },
+              min: 0,
+              max: 10,
               divisions: 10,
+              thumbColor: Colors.blue.shade100,
             )
           ],
         ),
