@@ -37,34 +37,55 @@ class QuestionsState extends State<Questions> {
   Icon icon4 = Icon(Icons.circle_outlined);
   Icon icon5 = Icon(Icons.circle_outlined);
 
+  Image terrible = Image.asset(
+    'images/happy.png',
+    scale: 1.8,
+  );
+  Image sad = Image.asset(
+    'images/happy.png',
+    scale: 1.8,
+  );
+  Image neutral = Image.asset(
+    'images/happy.png',
+    scale: 1.6,
+  );
+  Image happy = Image.asset(
+    'images/happy.png',
+    scale: 1.8,
+  );
+  Image great = Image.asset(
+    'images/happy.png',
+    scale: 1.8,
+  );
+
   Icon getProgressIcon(int index) {
     if (index <= questionIndex) {
       if (index == 1) {
         setState(() {
-          icon1 = Icon(Icons.check_circle_outline_sharp);
+          icon1 = Icon(Icons.circle);
         });
       }
       if (index == 2) {
         setState(() {
-          icon2 = Icon(Icons.check_circle_outline_sharp);
+          icon2 = Icon(Icons.circle);
         });
       }
       if (index == 3) {
         setState(() {
-          icon3 = Icon(Icons.check_circle_outline_sharp);
+          icon3 = Icon(Icons.circle);
         });
       }
       if (index == 4) {
         setState(() {
-          icon4 = Icon(Icons.check_circle_outline_sharp);
+          icon4 = Icon(Icons.circle);
         });
       }
       if (index == 5) {
         setState(() {
-          icon5 = Icon(Icons.check_circle_outline_sharp);
+          icon5 = Icon(Icons.circle);
         });
       }
-      return Icon(Icons.check_circle_outline_sharp);
+      return Icon(Icons.circle);
     } else {
       if (index == 1) {
         setState(() {
@@ -95,6 +116,70 @@ class QuestionsState extends State<Questions> {
     }
   }
 
+  void imageUpdate(double newRating) {
+    if (newRating < 2 && newRating >= 0) {
+      setState(() {
+        terrible = Image.asset(
+          'images/terrible.png',
+          color: Colors.blueAccent,
+          scale: 1.8,
+        );
+        sad = Image.asset('images/sad.png', scale: 1.8);
+        neutral = Image.asset('images/neutral.png', scale: 1.6);
+        happy = Image.asset('images/happy.png', scale: 1.8);
+        great = Image.asset('images/great.png', scale: 1.8);
+      });
+    } else if (newRating < 4 && newRating >= 2) {
+      setState(() {
+        sad = Image.asset(
+          'images/sad.png',
+          color: Colors.blueAccent,
+          scale: 1.8,
+        );
+        terrible = Image.asset('images/terrible.png', scale: 1.8);
+        neutral = Image.asset('images/neutral.png', scale: 1.6);
+        happy = Image.asset('images/happy.png', scale: 1.8);
+        great = Image.asset('images/great.png', scale: 1.8);
+      });
+    } else if (newRating < 6 && newRating >= 4) {
+      setState(() {
+        neutral = Image.asset(
+          'images/neutral.png',
+          color: Colors.blueAccent,
+          scale: 1.6,
+        );
+        terrible = Image.asset('images/terrible.png', scale: 1.8);
+        sad = Image.asset('images/sad.png', scale: 1.8);
+        happy = Image.asset('images/happy.png', scale: 1.8);
+        great = Image.asset('images/great.png', scale: 1.8);
+      });
+    } else if (newRating < 8 && newRating >= 6) {
+      setState(() {
+        happy = Image.asset(
+          'images/happy.png',
+          color: Colors.blueAccent,
+          scale: 1.8,
+        );
+        terrible = Image.asset('images/terrible.png', scale: 1.8);
+        sad = Image.asset('images/sad.png', scale: 1.8);
+        neutral = Image.asset('images/neutral.png', scale: 1.6);
+        great = Image.asset('images/great.png', scale: 1.8);
+      });
+    } else {
+      setState(() {
+        great = Image.asset(
+          'images/great.png',
+          color: Colors.blueAccent,
+          scale: 1.8,
+        );
+        terrible = Image.asset('images/terrible.png', scale: 1.8);
+        sad = Image.asset('images/sad.png', scale: 1.8);
+        neutral = Image.asset('images/neutral.png', scale: 1.6);
+        happy = Image.asset('images/happy.png', scale: 1.8);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,7 +201,7 @@ class QuestionsState extends State<Questions> {
               padding: EdgeInsets.only(
                 left: 0,
                 right: 0,
-                top: 45,
+                top: 20,
                 bottom: 0,
               ),
               child: Column(
@@ -124,42 +209,15 @@ class QuestionsState extends State<Questions> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      IconButton(
-                        iconSize: 60,
-                        onPressed: () {},
-                        icon: Image.asset(
-                          'images/terrible.png',
-                        ),
-                      ),
-                      IconButton(
-                        iconSize: 60,
-                        onPressed: () {},
-                        icon: Image.asset(
-                          'images/sad.png',
-                        ),
-                      ),
-                      IconButton(
-                        iconSize: 68,
-                        onPressed: () {},
-                        icon: Image.asset(
-                          'images/neutral.png',
-                        ),
-                      ),
-                      IconButton(
-                        iconSize: 60,
-                        onPressed: () {},
-                        icon: Image.asset(
-                          'images/happy.png',
-                        ),
-                      ),
-                      IconButton(
-                        iconSize: 60,
-                        onPressed: () {},
-                        icon: Image.asset(
-                          'images/great.png',
-                        ),
-                      ),
+                      terrible,
+                      sad,
+                      neutral,
+                      happy,
+                      great,
                     ],
+                  ),
+                  SizedBox(
+                    height: 45,
                   ),
                   Text(
                     rating.toInt().toString(),
@@ -171,10 +229,9 @@ class QuestionsState extends State<Questions> {
                     child: CupertinoSlider(
                       value: rating,
                       onChanged: (newRating) {
+                        imageUpdate(newRating);
                         setState(() => rating = newRating);
-                        setState(() {
-                          encourageText('neutral');
-                        });
+                        encourageText('neutral');
                         if (rating > 0) {
                           setState(() {
                             encourageText('terrible');
@@ -218,6 +275,19 @@ class QuestionsState extends State<Questions> {
                 textAlign: TextAlign.center,
               ),
             ),
+            SizedBox(
+              height: 30,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                getProgressIcon(1),
+                getProgressIcon(2),
+                getProgressIcon(3),
+                getProgressIcon(4),
+                getProgressIcon(5)
+              ],
+            )
           ],
         ),
       ]),
@@ -228,19 +298,17 @@ class QuestionsState extends State<Questions> {
         child: BottomNavigationBar(
           items: [
             BottomNavigationBarItem(
+              label: '',
               icon: IconButton(
                   iconSize: 40,
                   onPressed: () {
                     back();
                   },
-                  icon: Icon(Icons.arrow_back_ios_sharp)),
-              label: '',
+                  icon: Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
+                  )),
             ),
-            BottomNavigationBarItem(icon: getProgressIcon(1), label: ''),
-            BottomNavigationBarItem(icon: getProgressIcon(2), label: ''),
-            BottomNavigationBarItem(icon: getProgressIcon(3), label: ''),
-            BottomNavigationBarItem(icon: getProgressIcon(4), label: ''),
-            BottomNavigationBarItem(icon: getProgressIcon(5), label: ''),
             BottomNavigationBarItem(
               label: '',
               icon: IconButton(
@@ -248,7 +316,10 @@ class QuestionsState extends State<Questions> {
                   onPressed: () {
                     next();
                   },
-                  icon: Icon(Icons.arrow_forward_ios_sharp)),
+                  icon: Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.white,
+                  )),
             ),
           ],
         ),

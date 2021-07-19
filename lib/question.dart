@@ -12,8 +12,8 @@ class Question extends StatelessWidget {
       padding: EdgeInsets.only(
         left: 20,
         right: 20,
-        top: 50,
-        bottom: 50,
+        top: 20,
+        bottom: 20,
       ),
       decoration: BoxDecoration(color: Colors.indigo[100]),
       child: Text(
