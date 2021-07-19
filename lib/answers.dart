@@ -31,8 +31,8 @@ class _AnswersState extends State<Answers> {
           padding: EdgeInsets.only(
             left: 0,
             right: 0,
-            top: 50,
-            bottom: 90,
+            top: 45,
+            bottom: 0,
           ),
           child: Column(
             children: [
@@ -122,14 +122,6 @@ class _AnswersState extends State<Answers> {
                   divisions: 10,
                   thumbColor: Colors.black,
                 ),
-              ),
-              CupertinoButton(
-                child: Text('Next'),
-                color: Colors.blueGrey,
-                onPressed: () {
-                  s.buttonPressed();
-                  // s.build(context);
-                },
               ),
             ],
           ),
