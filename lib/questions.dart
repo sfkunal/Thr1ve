@@ -8,13 +8,18 @@ class Questions extends StatefulWidget {
 }
 
 class QuestionsState extends State<Questions> {
+  var _answerList = [];
+  List getAnswerList() {
+    return _answerList;
+  }
+
   String encourage = '';
   Map<String, String> encourage_map = {
-    'terrible': 'Uh-oh! Make this a priority in your training!',
-    'sad': 'No worries. Focus on improving slightly every day.',
-    'neutral': 'Don\'t stress. Everyone has off days!',
-    'happy': 'Hard work pays off. Great job.',
-    'great': 'Excellent. You\'re on the path to greatness.',
+    'terrible': 'Work on this!',
+    'sad': 'Don\'t give up! You got it.',
+    'neutral': 'Solid. Keep working!',
+    'happy': 'On fire!',
+    'great': 'Keep Thr1ving!',
   };
   void encourageText(String name) {
     encourage = encourage_map[name].toString();
@@ -224,6 +229,19 @@ class QuestionsState extends State<Questions> {
                     textScaleFactor: 5,
                   ),
                   SizedBox(
+                    height: 35,
+                  ),
+                  Container(
+                    child: Text(
+                      encourage,
+                      textScaleFactor: 3,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  SizedBox(
                     width: 370,
                     height: 100,
                     child: CupertinoSlider(
@@ -232,7 +250,7 @@ class QuestionsState extends State<Questions> {
                         imageUpdate(newRating);
                         setState(() => rating = newRating);
                         encourageText('neutral');
-                        if (rating > 0) {
+                        if (rating >= 0) {
                           setState(() {
                             encourageText('terrible');
                           });
@@ -266,13 +284,6 @@ class QuestionsState extends State<Questions> {
                     ),
                   ),
                 ],
-              ),
-            ),
-            Container(
-              child: Text(
-                encourage,
-                textScaleFactor: 2,
-                textAlign: TextAlign.center,
               ),
             ),
             SizedBox(
@@ -331,6 +342,8 @@ class QuestionsState extends State<Questions> {
     if (questionIndex < numQuestions - 1) {
       setState(() {
         questionIndex = questionIndex + 1;
+        _answerList.add(rating);
+        print('added ' + rating.toString() + ' to answer list');
       });
     }
   }
