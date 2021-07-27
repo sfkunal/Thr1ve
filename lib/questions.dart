@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_application_1/main.dart';
 import './question.dart';
 
 class Questions extends StatefulWidget {
@@ -280,7 +279,6 @@ class QuestionsState extends State<Questions> {
                             encourageText('great');
                           });
                         }
-                        // print(rating);
                       },
                       min: 0,
                       max: 10,
@@ -352,13 +350,7 @@ class QuestionsState extends State<Questions> {
         print('current answer list: ' + _answerList.toString());
         if (questionIndex == numQuestions) {
           questionIndex = 0;
-          Navigator.push(
-            context,
-            new MaterialPageRoute(
-                builder: (ctxt) => new MyHomePage(
-                      title: '',
-                    )),
-          );
+          Navigator.pop(context);
         }
       });
     }
