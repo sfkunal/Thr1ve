@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_application_1/main.dart';
 import './question.dart';
 
 class Questions extends StatefulWidget {
@@ -9,11 +10,17 @@ class Questions extends StatefulWidget {
 
 class QuestionsState extends State<Questions> {
   var _answerList = [];
+  var rating = 5.0;
+  var numQuestions = 5;
+  var questionIndex = 0;
+
+  String encourage = '';
+  String currQuestion = '';
+
   List getAnswerList() {
     return _answerList;
   }
 
-  String encourage = '';
   Map<String, String> encourage_map = {
     'terrible': 'Work on this!',
     'sad': 'Don\'t give up! You got it.',
@@ -21,26 +28,14 @@ class QuestionsState extends State<Questions> {
     'happy': 'On fire!',
     'great': 'Keep Thr1ving!',
   };
-  void encourageText(String name) {
-    encourage = encourage_map[name].toString();
-  }
 
-  var rating = 5.0;
-  var numQuestions = 5;
-  var questionIndex = 0;
-  String currQuestion = '';
-  var _questionList = [
+  List _questionList = [
     'How intense was your footwork today?',
     'How supported do you feel by coaches?',
     'How easily are you able to consider constructive feedback?',
     'question 4',
     'question 5'
   ];
-  Icon icon1 = Icon(Icons.circle_outlined);
-  Icon icon2 = Icon(Icons.circle_outlined);
-  Icon icon3 = Icon(Icons.circle_outlined);
-  Icon icon4 = Icon(Icons.circle_outlined);
-  Icon icon5 = Icon(Icons.circle_outlined);
 
   Image terrible = Image.asset(
     'images/happy.png',
@@ -62,6 +57,12 @@ class QuestionsState extends State<Questions> {
     'images/happy.png',
     scale: 1.8,
   );
+
+  Icon icon1 = Icon(Icons.circle_outlined);
+  Icon icon2 = Icon(Icons.circle_outlined);
+  Icon icon3 = Icon(Icons.circle_outlined);
+  Icon icon4 = Icon(Icons.circle_outlined);
+  Icon icon5 = Icon(Icons.circle_outlined);
 
   Icon getProgressIcon(int index) {
     if (index <= questionIndex) {
@@ -119,6 +120,10 @@ class QuestionsState extends State<Questions> {
       }
       return Icon(Icons.circle_outlined);
     }
+  }
+
+  void encourageText(String name) {
+    encourage = encourage_map[name].toString();
   }
 
   void imageUpdate(double newRating) {
@@ -339,11 +344,22 @@ class QuestionsState extends State<Questions> {
   }
 
   void next() {
-    if (questionIndex < numQuestions - 1) {
+    if (questionIndex < numQuestions) {
       setState(() {
         questionIndex = questionIndex + 1;
         _answerList.add(rating);
-        print('added ' + rating.toString() + ' to answer list');
+        print('question index: ' + questionIndex.toString());
+        print('current answer list: ' + _answerList.toString());
+        if (questionIndex == numQuestions) {
+          questionIndex = 0;
+          Navigator.push(
+            context,
+            new MaterialPageRoute(
+                builder: (ctxt) => new MyHomePage(
+                      title: '',
+                    )),
+          );
+        }
       });
     }
   }
