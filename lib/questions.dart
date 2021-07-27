@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:path_provider/path_provider.dart';
 import './question.dart';
+import 'dart:io';
+import './user_data.dart';
+import 'dart:convert' show json, jsonDecode, jsonEncode;
 
 class Questions extends StatefulWidget {
   @override
@@ -121,6 +125,37 @@ class QuestionsState extends State<Questions> {
     }
   }
 
+  _read() async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/responses.txt');
+      String text = await file.readAsString();
+      Map<String, dynamic> userMap = jsonDecode(text);
+      UserData user = UserData.fromJson(userMap);
+      List<double> answers = user.answerList.map((s) => s as double).toList();
+    } catch (e) {
+      print("Couldn't read file");
+    }
+  }
+  // a
+  // a   1 2 4 5 5 2
+  // a
+  // a
+  // a
+
+  // a
+  // aa
+
+  _save() async {
+    // todo: i want to open existing file if it exists or create a new one if it doesnt exist. add each list of responses per line
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/responses.txt');
+    var d = UserData([2.0, 3.0]);
+    String json = jsonEncode(d);
+    await file.writeAsString(json);
+    print('saved');
+  }
+
   void encourageText(String name) {
     encourage = encourage_map[name].toString();
   }
@@ -191,6 +226,7 @@ class QuestionsState extends State<Questions> {
 
   @override
   Widget build(BuildContext context) {
+    _read();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -350,6 +386,7 @@ class QuestionsState extends State<Questions> {
         print('current answer list: ' + _answerList.toString());
         if (questionIndex == numQuestions) {
           questionIndex = 0;
+          // _save(_answerList)
           Navigator.pop(context);
         }
       });

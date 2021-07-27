@@ -10,7 +10,6 @@ class Statistics extends StatefulWidget {
 }
 
 class _StatisticsState extends State<Statistics> {
-  var rating = 1.0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
