@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
@@ -12,17 +14,20 @@ class Questions extends StatefulWidget {
 }
 
 class QuestionsState extends State<Questions> {
+  String currQuestion = '';
+  String currCategory = '';
   var _answerList = [];
   var rating = 5.0;
   var numQuestions = 5;
   var questionIndex = 0;
 
   String encourage = '';
-  String currQuestion = '';
 
   List getAnswerList() {
     return _answerList;
   }
+
+  List _questionList = [];
 
   Map<String, String> encourage_map = {
     'terrible': 'Work on this!',
@@ -32,13 +37,18 @@ class QuestionsState extends State<Questions> {
     'great': 'Keep Thr1ving!',
   };
 
-  List _questionList = [
-    'How intense was your footwork today?',
-    'How supported do you feel by coaches?',
-    'How easily are you able to consider constructive feedback?',
-    'question 4',
-    'question 5'
-  ];
+  Map<String, String> _questionMap = {
+    'How intense was your footwork today?': 'Energy',
+    'How supported do you feel by coaches?': 'Mindset',
+    'How easily are you able to consider constructive feedback?': 'Mindset',
+    'question 4': 'Performance',
+    'question 5': 'Drive',
+    '2': '3',
+    '5': '5'
+  };
+
+  Map<String, Map<double, String>> _answerMap = {};
+  //question => rating => category
 
   Image terrible = Image.asset(
     'images/happy.png',
@@ -137,20 +147,12 @@ class QuestionsState extends State<Questions> {
       print("Couldn't read file");
     }
   }
-  // a
-  // a   1 2 4 5 5 2
-  // a
-  // a
-  // a
-
-  // a
-  // aa
 
   _save() async {
     // todo: i want to open existing file if it exists or create a new one if it doesnt exist. add each list of responses per line
     final directory = await getApplicationDocumentsDirectory();
     final file = File('${directory.path}/responses.txt');
-    var d = UserData([2.0, 3.0]);
+    var d = UserData(_answerList);
     String json = jsonEncode(d);
     await file.writeAsString(json);
     print('saved');
@@ -224,9 +226,31 @@ class QuestionsState extends State<Questions> {
     }
   }
 
+  void getQuestions() {
+    var keys = _questionMap.keys.toList()..shuffle();
+    if (_questionList.length < numQuestions) {
+      for (var k in keys) {
+        _questionList.add(k);
+      }
+      print('today\'s question list: ' + _questionList.toString());
+      print('');
+    }
+  }
+
+  Node packData(double rating, String question, String category) {
+    Node n = new Node(rating, currQuestion, currCategory);
+    print(n.toString());
+    return n;
+  }
+
   @override
   Widget build(BuildContext context) {
-    _read();
+    getQuestions();
+    currQuestion = _questionList[questionIndex];
+    if (_questionMap.containsKey(currQuestion)) {
+      currCategory = _questionMap[currQuestion].toString();
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -237,9 +261,7 @@ class QuestionsState extends State<Questions> {
             ),
       ),
       body: Column(children: [
-        Question(
-          _questionList[questionIndex],
-        ),
+        Question(currQuestion),
         Column(
           children: [
             Container(
@@ -352,7 +374,11 @@ class QuestionsState extends State<Questions> {
               icon: IconButton(
                   iconSize: 40,
                   onPressed: () {
-                    back();
+                    if (questionIndex > 0) {
+                      setState(() {
+                        questionIndex = questionIndex - 1;
+                      });
+                    }
                   },
                   icon: Icon(
                     Icons.arrow_back_ios,
@@ -364,7 +390,18 @@ class QuestionsState extends State<Questions> {
               icon: IconButton(
                   iconSize: 40,
                   onPressed: () {
-                    next();
+                    if (questionIndex < numQuestions) {
+                      packData(rating, currQuestion, currCategory);
+                      setState(() {
+                        questionIndex = questionIndex + 1;
+                        _answerList.add(rating);
+                        if (questionIndex == numQuestions) {
+                          questionIndex = 0;
+                          _save();
+                          Navigator.pop(context, _answerList);
+                        }
+                      });
+                    }
                   },
                   icon: Icon(
                     Icons.arrow_forward_ios,
@@ -375,29 +412,5 @@ class QuestionsState extends State<Questions> {
         ),
       ),
     );
-  }
-
-  void next() {
-    if (questionIndex < numQuestions) {
-      setState(() {
-        questionIndex = questionIndex + 1;
-        _answerList.add(rating);
-        print('question index: ' + questionIndex.toString());
-        print('current answer list: ' + _answerList.toString());
-        if (questionIndex == numQuestions) {
-          questionIndex = 0;
-          // _save(_answerList)
-          Navigator.pop(context);
-        }
-      });
-    }
-  }
-
-  void back() {
-    if (questionIndex > 0) {
-      setState(() {
-        questionIndex = questionIndex - 1;
-      });
-    }
   }
 }
