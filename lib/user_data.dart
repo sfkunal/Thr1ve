@@ -1,27 +1,36 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'dart:convert';
 
 class Node {
-  double rating;
-  String question;
-  String category;
+  final double rating;
+  final String question;
+  final String category;
 
-  Node(this.rating, this.question, this.category);
+  Node({required this.rating, required this.question, required this.category});
 
   String toString() {
     return this.question + " " + this.rating.toString() + " " + this.category;
   }
-}
 
-@JsonSerializable()
-class UserData {
-  List<dynamic> answerList;
+  factory Node.fromJson(Map<String, dynamic> jsonData) {
+    return Node(
+      rating: jsonData['rating'],
+      question: jsonData['question'],
+      category: jsonData['category'],
+    );
+  }
 
-  UserData(this.answerList);
+  static String encode(List<Node> node) => json.encode(
+        node.map<Map<String, dynamic>>((node) => Node.toMap(node)).toList(),
+      );
 
-  UserData.fromJson(Map<String, dynamic> json)
-      : answerList = json['answerList'];
+  static List<Node> decode(String node) => (json.decode(node) as List<dynamic>)
+      .map<Node>((item) => Node.fromJson(item))
+      .toList();
 
-  Map<String, dynamic> toJson() => {
-        'answerList': answerList,
+  static Map<String, dynamic> toMap(Node music) => {
+        'rating': music.rating,
+        'question': music.question,
+        'category': music.category,
       };
 }

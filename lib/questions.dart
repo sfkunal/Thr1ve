@@ -1,12 +1,11 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
 import './question.dart';
 import 'dart:io';
 import './user_data.dart';
-import 'dart:convert' show json, jsonDecode, jsonEncode;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 class Questions extends StatefulWidget {
   @override
@@ -41,14 +40,11 @@ class QuestionsState extends State<Questions> {
     'How intense was your footwork today?': 'Energy',
     'How supported do you feel by coaches?': 'Mindset',
     'How easily are you able to consider constructive feedback?': 'Mindset',
-    'question 4': 'Performance',
-    'question 5': 'Drive',
-    '2': '3',
-    '5': '5'
+    'How conscious are you of what you eat?': 'Energy',
+    'How much do you enjoy pushing your limits?': 'Drive',
+    'How well did your mindset support your performance today?': 'Performance',
+    'How well did you stay calm during adversity?': 'Mindset'
   };
-
-  Map<String, Map<double, String>> _answerMap = {};
-  //question => rating => category
 
   Image terrible = Image.asset(
     'images/happy.png',
@@ -135,29 +131,6 @@ class QuestionsState extends State<Questions> {
     }
   }
 
-  _read() async {
-    try {
-      final directory = await getApplicationDocumentsDirectory();
-      final file = File('${directory.path}/responses.txt');
-      String text = await file.readAsString();
-      Map<String, dynamic> userMap = jsonDecode(text);
-      UserData user = UserData.fromJson(userMap);
-      List<double> answers = user.answerList.map((s) => s as double).toList();
-    } catch (e) {
-      print("Couldn't read file");
-    }
-  }
-
-  _save() async {
-    // todo: i want to open existing file if it exists or create a new one if it doesnt exist. add each list of responses per line
-    final directory = await getApplicationDocumentsDirectory();
-    final file = File('${directory.path}/responses.txt');
-    var d = UserData(_answerList);
-    String json = jsonEncode(d);
-    await file.writeAsString(json);
-    print('saved');
-  }
-
   void encourageText(String name) {
     encourage = encourage_map[name].toString();
   }
@@ -226,6 +199,35 @@ class QuestionsState extends State<Questions> {
     }
   }
 
+  _clear() async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/response.txt');
+      file.writeAsStringSync('');
+      print('cleared');
+      print(file.readAsString().toString());
+    } catch (e) {
+      print('Couldn\'t read file');
+    }
+  }
+
+  _read() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    final String musicsString = await prefs.getString('answer_key').toString();
+    final List<Node> nodes = Node.decode(musicsString);
+
+    print('read: ' + nodes.toString());
+  }
+
+  _save(Node n) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String encoded = Node.encode([n]);
+    await prefs.setString('answer_key', encoded);
+
+    print('saved: ' + n.toString() + ' as ' + encoded);
+  }
+
   void getQuestions() {
     var keys = _questionMap.keys.toList()..shuffle();
     if (_questionList.length < numQuestions) {
@@ -233,13 +235,19 @@ class QuestionsState extends State<Questions> {
         _questionList.add(k);
       }
       print('today\'s question list: ' + _questionList.toString());
-      print('');
     }
   }
 
   Node packData(double rating, String question, String category) {
-    Node n = new Node(rating, currQuestion, currCategory);
+    Node n = new Node(
+      rating: rating,
+      question: currQuestion,
+      category: currCategory,
+    );
     print(n.toString());
+    _save(n);
+    _read();
+    // _clear();
     return n;
   }
 
@@ -397,7 +405,6 @@ class QuestionsState extends State<Questions> {
                         _answerList.add(rating);
                         if (questionIndex == numQuestions) {
                           questionIndex = 0;
-                          _save();
                           Navigator.pop(context, _answerList);
                         }
                       });
