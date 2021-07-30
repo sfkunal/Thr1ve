@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import './questions.dart';
 import './statistics.dart';
 
@@ -40,7 +41,20 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  String treeLocation = 'images/frame_010.png';
+
   int _selectedIndex = 0;
+
+  void updateTree() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    int startIndex = prefs.getInt('index') ?? 0;
+    //todo get the next 5 frames
+    // then initialize a timer
+    //set state to update tree location
+    //pause the timer for .1 sec
+    //do above 2 lines for each frame.
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             SizedBox(height: 5),
             Image.asset(
-              'images/base_tree2.png',
+              treeLocation,
             )
           ],
         ),
@@ -98,13 +112,17 @@ class _MyHomePageState extends State<MyHomePage> {
             Navigator.push(
               context,
               new MaterialPageRoute(builder: (ctxt) => new Questions()),
-            );
+            ).then((value) {
+              updateTree();
+            });
           }
           if (_selectedIndex == 2) {
             Navigator.push(
               context,
               new MaterialPageRoute(builder: (ctxt) => new Statistics()),
-            );
+            ).then((value) {
+              updateTree();
+            });
           }
         },
       ),

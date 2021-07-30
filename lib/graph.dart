@@ -8,6 +8,8 @@ class ScoreGraph extends StatefulWidget {
   _ScoreGraphState createState() => _ScoreGraphState();
 }
 
+final int daysOnRecord = 30;
+
 List<Point> mindsetData = [];
 List<Point> energyData = [];
 List<Point> performanceData = [];
@@ -60,7 +62,6 @@ class _ScoreGraphState extends State<ScoreGraph> {
       for (int j = 0; j < pastMonth[i].length; j++) {
         String currCategory = pastMonth[i][j].category;
         double currRating = pastMonth[i][j].rating;
-        // print(currRating.toString() + ' ' + currCategory);
 
         if (currCategory == 'Mindset') {
           setState(() {
@@ -94,11 +95,12 @@ class _ScoreGraphState extends State<ScoreGraph> {
       performance = List.from(currPerformance.reversed);
       drive = List.from(currDrive.reversed);
     });
-
-    print('mindset: ' + mindset.toString());
-    print('energy: ' + energy.toString());
-    print('performance: ' + performance.toString());
-    print('drive: ' + drive.toString());
+    int startIndex =
+        mindset.length - daysOnRecord < 0 ? 0 : mindset.length - daysOnRecord;
+    mindset = mindset.sublist(startIndex);
+    energy = energy.sublist(startIndex);
+    performance = performance.sublist(startIndex);
+    drive = drive.sublist(startIndex);
 
     for (int i = 0; i < mindset.length; i++) {
       setState(() {
@@ -114,6 +116,11 @@ class _ScoreGraphState extends State<ScoreGraph> {
     for (int i = 0; i < drive.length; i++) {
       driveData.add(new Point(i, drive[i]));
     }
+
+    // print('mindset: ' + mindset.toString());
+    // print('energy: ' + energy.toString());
+    // print('performance: ' + performance.toString());
+    // print('drive: ' + drive.toString());
   }
 
   @protected
@@ -121,11 +128,16 @@ class _ScoreGraphState extends State<ScoreGraph> {
   void initState() {
     super.initState();
     isShowingMainData = true;
-
     _prefill();
+  }
 
-    //todo loop thru past month lists and properly initialize all instance variables
-    //then set feature value instances
+  double avg(List<double> list) {
+    double average = 0;
+    list.forEach((element) {
+      average += element;
+    });
+    average = average / list.length;
+    return average;
   }
 
   @override
@@ -225,12 +237,6 @@ class _ScoreGraphState extends State<ScoreGraph> {
             switch (value.toInt()) {
               case 14:
                 return 'Responses This Month';
-              // case 10:
-              //   return 'Week 2';
-              // case 17:
-              //   return 'Week 3';
-              // case 24:
-              //   return 'Week 4';
             }
             return '';
           },
@@ -297,13 +303,12 @@ class _ScoreGraphState extends State<ScoreGraph> {
       }
     }
     return answers;
-    // return List.from(answers.reversed);
   }
 
   List<LineChartBarData> linesBarData1() {
     final lineChartBarData1 = LineChartBarData(
       spots: toList(mindset),
-      isCurved: false,
+      isCurved: true,
       colors: [Colors.blue],
       barWidth: 3,
       isStrokeCapRound: true,
@@ -316,7 +321,7 @@ class _ScoreGraphState extends State<ScoreGraph> {
     );
     final lineChartBarData2 = LineChartBarData(
       spots: toList(energy),
-      isCurved: false,
+      isCurved: true,
       colors: [Colors.greenAccent.shade400],
       barWidth: 3,
       isStrokeCapRound: true,
@@ -329,7 +334,7 @@ class _ScoreGraphState extends State<ScoreGraph> {
     );
     final lineChartBarData3 = LineChartBarData(
       spots: toList(performance),
-      isCurved: false,
+      isCurved: true,
       colors: [
         Colors.purple,
       ],
@@ -344,7 +349,7 @@ class _ScoreGraphState extends State<ScoreGraph> {
     );
     final lineChartBarData4 = LineChartBarData(
       spots: toList(drive),
-      isCurved: false,
+      isCurved: true,
       colors: [Colors.black],
       barWidth: 3,
       isStrokeCapRound: true,

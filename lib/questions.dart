@@ -41,34 +41,21 @@ class QuestionsState extends State<Questions> {
       'Rate your physical strength today',
       'How conscious are you of what you eat?',
     ],
-    // 'How intense was your footwork today?': 'Energy',
-    // 'Rate your physical strength today': 'Energy',
-    // 'How conscious are you of what you eat?': 'Energy',
     'Mindset': [
       'How supported do you feel by coaches?',
       'How easily are you able to consider constructive feedback?',
       'How well did you stay calm during adversity?',
     ],
-    // 'How supported do you feel by coaches?': 'Mindset',
-    // 'How easily are you able to consider constructive feedback?': 'Mindset',
-    // 'How well did you stay calm during adversity?': 'Mindset',
     'Drive': [
       'How much do you enjoy pushing your limits?',
       'How much do you focus on results and outcomes?',
       'How well do you think you will compete today?',
     ],
-    // 'How much do you enjoy pushing your limits?': 'Drive',
-    // 'How much do you focus on results and outcomes?': 'Drive',
-    // 'How well do you think you will compete today?': 'Drive',
     'Performance': [
       'How well did your mindset support your performance today?',
       'How much did you improve today?',
       'How much do you feel like your training is heading in the right direction?',
     ],
-    //   'How well did your mindset support your performance today?': 'Performance',
-    //   'How much did you improve today?': 'Performance',
-    //   'How much do you feel like your training is heading in the right direction?':
-    //       'Performance',
   };
 
   Image terrible = Image.asset(
@@ -216,6 +203,7 @@ class QuestionsState extends State<Questions> {
   _save(List<Node> n) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     int index = prefs.getInt('index') ?? 0;
+    print(index);
     final String encoded = Node.encode(n);
     String name = 'answer_key$index';
     await prefs.setString(name, encoded);
@@ -251,7 +239,7 @@ class QuestionsState extends State<Questions> {
     _questionList.addAll(drive.sublist(0, 1));
     _categoryList.addAll(['Drive']);
 
-    print('today\'s question list: ' + _questionList.toString());
+    // print('today\'s question list: ' + _questionList.toString());
 
     // var keys = _questionMap.keys.toList()..shuffle();
     // if (_questionList.length < numQuestions) {
@@ -270,33 +258,17 @@ class QuestionsState extends State<Questions> {
     return n;
   }
 
-  // @protected
-  // @mustCallSuper
-  // void initState() {
-  //   super.initState();
-
-  //   getQuestions();
-  //   //todo loop thru past month lists and properly initialize all instance variables
-  //   //then set feature value instances
-  // }
-
   @override
   Widget build(BuildContext context) {
     getQuestions();
     currQuestion = _questionList[questionIndex];
-    // if (_questionMap.containsKey(currQuestion)) {
-    //   currCategory = _questionMap[currQuestion].toString();
-    // }
+
     currCategory = _categoryList[questionIndex];
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Center(
-            // child: Text(
-            //   'Grow',
-            // ),
-            ),
+        title: Center(),
       ),
       body: Column(children: [
         Question(currQuestion),
@@ -440,7 +412,7 @@ class QuestionsState extends State<Questions> {
                         if (questionIndex == numQuestions) {
                           questionIndex = 0;
                           _save(answers);
-                          Navigator.pop(context, _answerList);
+                          Navigator.pop(context);
                         }
                       });
                     }
