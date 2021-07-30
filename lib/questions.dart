@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:path_provider/path_provider.dart';
 import './question.dart';
-import 'dart:io';
 import './user_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 
 class Questions extends StatefulWidget {
   @override
@@ -13,11 +10,12 @@ class Questions extends StatefulWidget {
 }
 
 class QuestionsState extends State<Questions> {
+  List<Node> answers = [];
   String currQuestion = '';
   String currCategory = '';
   var _answerList = [];
   var rating = 5.0;
-  var numQuestions = 5;
+  var numQuestions = 4;
   var questionIndex = 0;
 
   String encourage = '';
@@ -27,6 +25,7 @@ class QuestionsState extends State<Questions> {
   }
 
   List _questionList = [];
+  List _categoryList = [];
 
   Map<String, String> encourage_map = {
     'terrible': 'Work on this!',
@@ -36,14 +35,40 @@ class QuestionsState extends State<Questions> {
     'great': 'Keep Thr1ving!',
   };
 
-  Map<String, String> _questionMap = {
-    'How intense was your footwork today?': 'Energy',
-    'How supported do you feel by coaches?': 'Mindset',
-    'How easily are you able to consider constructive feedback?': 'Mindset',
-    'How conscious are you of what you eat?': 'Energy',
-    'How much do you enjoy pushing your limits?': 'Drive',
-    'How well did your mindset support your performance today?': 'Performance',
-    'How well did you stay calm during adversity?': 'Mindset'
+  Map<String, List<String>> _questionMap = {
+    'Energy': [
+      'How intense was your footwork today?',
+      'Rate your physical strength today',
+      'How conscious are you of what you eat?',
+    ],
+    // 'How intense was your footwork today?': 'Energy',
+    // 'Rate your physical strength today': 'Energy',
+    // 'How conscious are you of what you eat?': 'Energy',
+    'Mindset': [
+      'How supported do you feel by coaches?',
+      'How easily are you able to consider constructive feedback?',
+      'How well did you stay calm during adversity?',
+    ],
+    // 'How supported do you feel by coaches?': 'Mindset',
+    // 'How easily are you able to consider constructive feedback?': 'Mindset',
+    // 'How well did you stay calm during adversity?': 'Mindset',
+    'Drive': [
+      'How much do you enjoy pushing your limits?',
+      'How much do you focus on results and outcomes?',
+      'How well do you think you will compete today?',
+    ],
+    // 'How much do you enjoy pushing your limits?': 'Drive',
+    // 'How much do you focus on results and outcomes?': 'Drive',
+    // 'How well do you think you will compete today?': 'Drive',
+    'Performance': [
+      'How well did your mindset support your performance today?',
+      'How much did you improve today?',
+      'How much do you feel like your training is heading in the right direction?',
+    ],
+    //   'How well did your mindset support your performance today?': 'Performance',
+    //   'How much did you improve today?': 'Performance',
+    //   'How much do you feel like your training is heading in the right direction?':
+    //       'Performance',
   };
 
   Image terrible = Image.asset(
@@ -71,7 +96,6 @@ class QuestionsState extends State<Questions> {
   Icon icon2 = Icon(Icons.circle_outlined);
   Icon icon3 = Icon(Icons.circle_outlined);
   Icon icon4 = Icon(Icons.circle_outlined);
-  Icon icon5 = Icon(Icons.circle_outlined);
 
   Icon getProgressIcon(int index) {
     if (index <= questionIndex) {
@@ -95,11 +119,6 @@ class QuestionsState extends State<Questions> {
           icon4 = Icon(Icons.circle);
         });
       }
-      if (index == 5) {
-        setState(() {
-          icon5 = Icon(Icons.circle);
-        });
-      }
       return Icon(Icons.circle);
     } else {
       if (index == 1) {
@@ -120,11 +139,6 @@ class QuestionsState extends State<Questions> {
       if (index == 4) {
         setState(() {
           icon4 = Icon(Icons.circle_outlined);
-        });
-      }
-      if (index == 5) {
-        setState(() {
-          icon5 = Icon(Icons.circle_outlined);
         });
       }
       return Icon(Icons.circle_outlined);
@@ -199,43 +213,52 @@ class QuestionsState extends State<Questions> {
     }
   }
 
-  _clear() async {
-    try {
-      final directory = await getApplicationDocumentsDirectory();
-      final file = File('${directory.path}/response.txt');
-      file.writeAsStringSync('');
-      print('cleared');
-      print(file.readAsString().toString());
-    } catch (e) {
-      print('Couldn\'t read file');
-    }
-  }
-
-  _read() async {
+  _save(List<Node> n) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    final String musicsString = await prefs.getString('answer_key').toString();
-    final List<Node> nodes = Node.decode(musicsString);
-
-    print('read: ' + nodes.toString());
-  }
-
-  _save(Node n) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String encoded = Node.encode([n]);
-    await prefs.setString('answer_key', encoded);
-
-    print('saved: ' + n.toString() + ' as ' + encoded);
+    int index = prefs.getInt('index') ?? 0;
+    final String encoded = Node.encode(n);
+    String name = 'answer_key$index';
+    await prefs.setString(name, encoded);
+    await prefs.setInt('index', index + 1);
+    print('saved');
   }
 
   void getQuestions() {
-    var keys = _questionMap.keys.toList()..shuffle();
-    if (_questionList.length < numQuestions) {
-      for (var k in keys) {
-        _questionList.add(k);
-      }
-      print('today\'s question list: ' + _questionList.toString());
-    }
+    // create 4 separate maps corresponding to each category
+    // convert each map to a list of its questions
+    // select 2 questions from each list and add them to questionLIst
+    // add the corresponding category twice.
+    //
+    List<String> mindset = _questionMap['Mindset']!.toList();
+    List<String> energy = _questionMap['Energy']!.toList();
+    List<String> performance = _questionMap['Performance']!.toList();
+    List<String> drive = _questionMap['Drive']!.toList();
+
+    mindset..shuffle();
+    energy..shuffle();
+    performance..shuffle();
+    drive..shuffle();
+
+    _questionList.addAll(mindset.sublist(0, 1));
+    _categoryList.addAll(['Mindset']);
+
+    _questionList.addAll(energy.sublist(0, 1));
+    _categoryList.addAll(['Energy']);
+
+    _questionList.addAll(performance.sublist(0, 1));
+    _categoryList.addAll(['Performance']);
+
+    _questionList.addAll(drive.sublist(0, 1));
+    _categoryList.addAll(['Drive']);
+
+    print('today\'s question list: ' + _questionList.toString());
+
+    // var keys = _questionMap.keys.toList()..shuffle();
+    // if (_questionList.length < numQuestions) {
+    //   for (var k in keys) {
+    //     _questionList.add(k);
+    //   }
+    // }
   }
 
   Node packData(double rating, String question, String category) {
@@ -244,20 +267,27 @@ class QuestionsState extends State<Questions> {
       question: currQuestion,
       category: currCategory,
     );
-    print(n.toString());
-    _save(n);
-    _read();
-    // _clear();
     return n;
   }
+
+  // @protected
+  // @mustCallSuper
+  // void initState() {
+  //   super.initState();
+
+  //   getQuestions();
+  //   //todo loop thru past month lists and properly initialize all instance variables
+  //   //then set feature value instances
+  // }
 
   @override
   Widget build(BuildContext context) {
     getQuestions();
     currQuestion = _questionList[questionIndex];
-    if (_questionMap.containsKey(currQuestion)) {
-      currCategory = _questionMap[currQuestion].toString();
-    }
+    // if (_questionMap.containsKey(currQuestion)) {
+    //   currCategory = _questionMap[currQuestion].toString();
+    // }
+    currCategory = _categoryList[questionIndex];
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -365,7 +395,6 @@ class QuestionsState extends State<Questions> {
                 getProgressIcon(2),
                 getProgressIcon(3),
                 getProgressIcon(4),
-                getProgressIcon(5)
               ],
             )
           ],
@@ -399,12 +428,18 @@ class QuestionsState extends State<Questions> {
                   iconSize: 40,
                   onPressed: () {
                     if (questionIndex < numQuestions) {
+                      answers.add(new Node(
+                        rating: rating,
+                        question: currQuestion,
+                        category: currCategory,
+                      ));
                       packData(rating, currQuestion, currCategory);
                       setState(() {
                         questionIndex = questionIndex + 1;
                         _answerList.add(rating);
                         if (questionIndex == numQuestions) {
                           questionIndex = 0;
+                          _save(answers);
                           Navigator.pop(context, _answerList);
                         }
                       });

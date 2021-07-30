@@ -34,6 +34,8 @@ dependencies:
   file_picker: ^3.0.4
   random_string: ^2.3.1
   shared_preferences: ^2.0.6
+  syncfusion_flutter_charts: ^19.2.49
+  fl_chart: ^0.36.3
 
 dev_dependencies:
   flutter_test:

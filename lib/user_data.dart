@@ -28,9 +28,9 @@ class Node {
       .map<Node>((item) => Node.fromJson(item))
       .toList();
 
-  static Map<String, dynamic> toMap(Node music) => {
-        'rating': music.rating,
-        'question': music.question,
-        'category': music.category,
+  static Map<String, dynamic> toMap(Node node) => {
+        'rating': node.rating,
+        'question': node.question,
+        'category': node.category,
       };
 }
