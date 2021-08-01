@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import './questions.dart';
 import './statistics.dart';
 import './help.dart';
+import 'tips.dart';
+import 'package:flutter/services.dart';
 
 // to pull:
 // git pull (do this everytime you switch devices)
@@ -81,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    updateTree();
+    // updateTree();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -101,22 +103,43 @@ class _MyHomePageState extends State<MyHomePage> {
           textAlign: TextAlign.center,
         ),
       ),
-      body: Center(
-        child: Column(
-          children: [
-            SizedBox(height: 40),
-            Text(
-              getEncourage(),
-              textScaleFactor: 3,
-            ),
-            SizedBox(height: 200),
-            Image.asset(
-              treeLocation,
-              scale: .001,
-            )
-          ],
+      body: Stack(children: [
+        Center(
+          child: Column(
+            children: [
+              SizedBox(height: 20),
+              Text(
+                getEncourage(),
+                textScaleFactor: 3,
+              ),
+              SizedBox(height: 200),
+              Image.asset(
+                treeLocation,
+                scale: .001,
+              )
+            ],
+          ),
         ),
-      ),
+        Positioned(
+            top: 500.0,
+            right: 0.0,
+            child: Column(
+              children: [
+                IconButton(
+                    iconSize: 50,
+                    onPressed: () {
+                      HapticFeedback.heavyImpact();
+                      Navigator.push(context,
+                          new MaterialPageRoute(builder: (ctxt) => new Tips()));
+                    },
+                    icon: Icon(
+                      Icons.lightbulb_outline_sharp,
+                      color: Colors.deepPurple,
+                    )),
+                Text('tips')
+              ],
+            )),
+      ]),
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: true,
         showUnselectedLabels: true,

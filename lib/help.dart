@@ -16,7 +16,7 @@ class _HelpState extends State<Help> {
     return Scaffold(
       backgroundColor: Colors.deepPurple.shade400,
       appBar: AppBar(
-        title: Text('Help Page'),
+        title: Text('Info'),
       ),
       body: Center(
         child: Column(
