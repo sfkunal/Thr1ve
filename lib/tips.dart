@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math';
-
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class Tips extends StatefulWidget {

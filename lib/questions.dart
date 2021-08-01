@@ -339,7 +339,7 @@ class QuestionsState extends State<Questions> {
               ),
             ),
             SizedBox(
-              height: 30,
+              height: 20,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

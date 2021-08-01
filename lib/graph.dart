@@ -231,7 +231,7 @@ class _ScoreGraphState extends State<ScoreGraph> {
               ),
             ),
             SizedBox(
-                height: 266,
+                height: 246,
                 child: Column(
                   children: [
                     Container(
@@ -280,7 +280,7 @@ class _ScoreGraphState extends State<ScoreGraph> {
                       ),
                     ),
                     SizedBox(
-                      height: 30,
+                      height: 20,
                     ),
                     Text(
                       'Your 7-Day Averages:',
@@ -334,7 +334,7 @@ class _ScoreGraphState extends State<ScoreGraph> {
                       ],
                     ),
                     SizedBox(
-                      height: 10,
+                      height: 20,
                     ),
                     Text(
                       'Thr1ve-Generated Goals:',
