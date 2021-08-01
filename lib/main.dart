@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 import './questions.dart';
@@ -42,7 +44,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String treeLocation = 'images/frame_090.png';
+  String treeLocation = 'images/frame_010.png';
   String encourage = '';
   List<String> encourageList = [
     'You keep improving. Insane!',
@@ -53,7 +55,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   int _selectedIndex = 0;
 
-  void updateTree() async {
+  void updateTree() {
+    for (int i = 10; i < 100; i++) {
+      setState(() {
+        treeLocation = 'images/frame_0$i.png';
+      });
+      sleep(Duration(milliseconds: 1000));
+      print('done');
+    }
+    print('done');
     // final SharedPreferences prefs = await SharedPreferences.getInstance();
     // int startIndex = prefs.getInt('index') ?? 0;
     // print('level: ' + startIndex.toString());
@@ -71,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // updateTree();
+    updateTree();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -135,20 +145,12 @@ class _MyHomePageState extends State<MyHomePage> {
         onTap: (index) {
           _selectedIndex = index;
           if (_selectedIndex == 1) {
-            Navigator.push(
-              context,
-              new MaterialPageRoute(builder: (ctxt) => new Questions()),
-            ).then((value) {
-              updateTree();
-            });
+            Navigator.push(context,
+                new MaterialPageRoute(builder: (ctxt) => new Questions()));
           }
           if (_selectedIndex == 2) {
-            Navigator.push(
-              context,
-              new MaterialPageRoute(builder: (ctxt) => new Statistics()),
-            ).then((value) {
-              updateTree();
-            });
+            Navigator.push(context,
+                new MaterialPageRoute(builder: (ctxt) => new Statistics()));
           }
         },
       ),

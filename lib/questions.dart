@@ -59,15 +59,15 @@ class QuestionsState extends State<Questions> {
   };
 
   Image terrible = Image.asset(
-    'images/happy.png',
+    'images/terrible.png',
     scale: 1.8,
   );
   Image sad = Image.asset(
-    'images/happy.png',
+    'images/sad.png',
     scale: 1.8,
   );
   Image neutral = Image.asset(
-    'images/happy.png',
+    'images/neutral.png',
     scale: 1.6,
   );
   Image happy = Image.asset(
@@ -75,7 +75,7 @@ class QuestionsState extends State<Questions> {
     scale: 1.8,
   );
   Image great = Image.asset(
-    'images/happy.png',
+    'images/great.png',
     scale: 1.8,
   );
 
