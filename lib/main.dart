@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 import './questions.dart';
 import './statistics.dart';
+import './help.dart';
 
 // to pull:
 // git pull (do this everytime you switch devices)
@@ -41,13 +42,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String treeLocation = 'images/frame_010.png';
+  String treeLocation = 'images/frame_090.png';
+  String encourage = '';
+  List<String> encourageList = [
+    'You keep improving. Insane!',
+    'The next GOAT. Thr1ve way.',
+    'Stack these leaves!',
+    'You\'re on fire!',
+  ];
 
   int _selectedIndex = 0;
 
   void updateTree() async {
     // final SharedPreferences prefs = await SharedPreferences.getInstance();
     // int startIndex = prefs.getInt('index') ?? 0;
+    // print('level: ' + startIndex.toString());
     //todo get the next 5 frames
     // then initialize a timer
     //set state to update tree location
@@ -55,35 +64,52 @@ class _MyHomePageState extends State<MyHomePage> {
     //do above 2 lines for each frame.
   }
 
+  String getEncourage() {
+    List shuffled = encourageList..shuffle();
+    return shuffled[0];
+  }
+
   @override
   Widget build(BuildContext context) {
+    // updateTree();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Center(
-          child: Text(
-            widget.title,
-          ),
+        leading: Row(
+          children: [
+            IconButton(
+              icon: Icon(Icons.help_outline),
+              onPressed: () {
+                Navigator.push(context,
+                    new MaterialPageRoute(builder: (ctxt) => new Help()));
+              },
+            ),
+          ],
+        ),
+        title: Text(
+          widget.title,
+          textAlign: TextAlign.center,
         ),
       ),
       body: Center(
         child: Column(
           children: [
-            SizedBox(height: 25),
+            SizedBox(height: 40),
             Text(
-              'You are doing well!',
-              textScaleFactor: 2.7,
+              getEncourage(),
+              textScaleFactor: 3,
             ),
-            SizedBox(height: 5),
+            SizedBox(height: 200),
             Image.asset(
               treeLocation,
+              scale: .001,
             )
           ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
+        showSelectedLabels: true,
+        showUnselectedLabels: true,
         items: [
           BottomNavigationBarItem(
             icon: Icon(
@@ -95,13 +121,13 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: Icon(
               Icons.sticky_note_2_outlined,
             ),
-            label: 'questions',
+            label: 'check-in',
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.assessment_outlined,
             ),
-            label: 'statistics',
+            label: 'results',
           ),
         ],
         currentIndex: _selectedIndex,
