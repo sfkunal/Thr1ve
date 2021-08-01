@@ -10,6 +10,8 @@ class ScoreGraph extends StatefulWidget {
 
 final int daysOnRecord = 30;
 
+final double goalImprovementFactor = 0.2;
+
 List<Point> mindsetData = [];
 List<Point> energyData = [];
 List<Point> performanceData = [];
@@ -118,6 +120,8 @@ class _ScoreGraphState extends State<ScoreGraph> {
     }
 
     // print('mindset: ' + mindset.toString());
+    // print(weekAvg(mindset));
+
     // print('energy: ' + energy.toString());
     // print('performance: ' + performance.toString());
     // print('drive: ' + drive.toString());
@@ -131,13 +135,27 @@ class _ScoreGraphState extends State<ScoreGraph> {
     _prefill();
   }
 
-  double avg(List<double> list) {
-    double average = 0;
-    list.forEach((element) {
-      average += element;
-    });
-    average = average / list.length;
-    return average;
+  double weekAvg(List<double> list) {
+    double answer = 0;
+    if (list.length > 7) {
+      List<double> newList = list.sublist(list.length - 7);
+      for (int i = 0; i < newList.length; i++) {
+        answer = answer + newList[i];
+      }
+      double fin = answer / newList.length;
+      return double.parse((fin).toStringAsFixed(2));
+    } else {
+      for (int i = 0; i < list.length; i++) {
+        answer = answer + list[i];
+      }
+      double fin = answer / list.length;
+      return double.parse((fin).toStringAsFixed(2));
+    }
+  }
+
+  double getGoal(double value) {
+    double x = (10 - value) * goalImprovementFactor + value;
+    return double.parse((x).toStringAsFixed(2));
   }
 
   @override
@@ -145,68 +163,224 @@ class _ScoreGraphState extends State<ScoreGraph> {
     _fill();
     return Container(
       decoration: new BoxDecoration(color: Colors.deepPurple),
-      child: Column(
-        children: [
-          AspectRatio(
-            aspectRatio: 1 / 1,
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Colors.purple.shade900,
-                    Color(0xff46426c),
-                  ],
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
+      child: Center(
+        child: Column(
+          children: [
+            AspectRatio(
+              aspectRatio: 1 / 1,
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.purple.shade900,
+                      Color(0xff46426c),
+                    ],
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                  ),
                 ),
-              ),
-              child: Stack(
-                children: <Widget>[
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      const SizedBox(
-                        height: 37,
-                      ),
-                      const SizedBox(
-                        height: 4,
-                      ),
-                      const Text(
-                        'Thr1ve Results',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 2),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(
-                        height: 37,
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding:
-                              const EdgeInsets.only(right: 16.0, left: 6.0),
-                          child: LineChart(
-                            sampleData1(),
+                child: Stack(
+                  children: <Widget>[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        const SizedBox(
+                          height: 37,
+                        ),
+                        const SizedBox(
+                          height: 4,
+                        ),
+                        const Text(
+                          'Thr1ve Results',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 2),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(
+                          height: 37,
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.only(right: 16.0, left: 6.0),
+                            child: LineChart(
+                              sampleData1(),
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                    ],
-                  ),
-                ],
+                        const SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          SizedBox(
-              height: 246,
-              child: Column(
-                children: [],
-              ))
-        ],
+            SizedBox(
+                height: 246,
+                child: Column(
+                  children: [
+                    Container(
+                      color: Colors.deepPurple.shade300,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Mindset',
+                            textScaleFactor: 2,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            'Energy',
+                            textScaleFactor: 2,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.greenAccent.shade400),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            'Performance',
+                            textScaleFactor: 2,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.purple),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            'Drive',
+                            textScaleFactor: 2,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      'Your 7-Day Averages:',
+                      style: TextStyle(color: Colors.white),
+                      textScaleFactor: 2.3,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          weekAvg(mindset).toString(),
+                          textScaleFactor: 3,
+                          style: TextStyle(
+                              color: Colors.blue,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Text(
+                          weekAvg(energy).toString(),
+                          textScaleFactor: 3,
+                          style: TextStyle(
+                              color: Colors.greenAccent.shade400,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Text(
+                          weekAvg(performance).toString(),
+                          textScaleFactor: 3,
+                          style: TextStyle(
+                              color: Colors.purple,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Text(
+                          weekAvg(drive).toString(),
+                          textScaleFactor: 3,
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      'Thr1ve-Generated Goals:',
+                      style: TextStyle(color: Colors.white),
+                      textScaleFactor: 2.3,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          getGoal(weekAvg(mindset)).toString(),
+                          textScaleFactor: 3,
+                          style: TextStyle(
+                              color: Colors.blue,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Text(
+                          getGoal(weekAvg(energy)).toString(),
+                          textScaleFactor: 3,
+                          style: TextStyle(
+                              color: Colors.greenAccent.shade400,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Text(
+                          getGoal(weekAvg(performance)).toString(),
+                          textScaleFactor: 3,
+                          style: TextStyle(
+                              color: Colors.purple,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Text(
+                          getGoal(weekAvg(drive)).toString(),
+                          textScaleFactor: 3,
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline),
+                        ),
+                      ],
+                    ),
+                  ],
+                ))
+          ],
+        ),
       ),
     );
   }

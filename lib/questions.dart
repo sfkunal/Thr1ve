@@ -18,7 +18,7 @@ class QuestionsState extends State<Questions> {
   var numQuestions = 4;
   var questionIndex = 0;
 
-  String encourage = '';
+  String encourage = 'Start your daily check-in!';
 
   List getAnswerList() {
     return _answerList;
@@ -27,7 +27,7 @@ class QuestionsState extends State<Questions> {
   List _questionList = [];
   List _categoryList = [];
 
-  Map<String, String> encourage_map = {
+  Map<String, String> _encourageMap = {
     'terrible': 'Work on this!',
     'sad': 'Don\'t give up! You got it.',
     'neutral': 'Solid. Keep working!',
@@ -133,7 +133,7 @@ class QuestionsState extends State<Questions> {
   }
 
   void encourageText(String name) {
-    encourage = encourage_map[name].toString();
+    encourage = _encourageMap[name].toString();
   }
 
   void imageUpdate(double newRating) {
@@ -203,20 +203,13 @@ class QuestionsState extends State<Questions> {
   _save(List<Node> n) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     int index = prefs.getInt('index') ?? 0;
-    print(index);
     final String encoded = Node.encode(n);
     String name = 'answer_key$index';
     await prefs.setString(name, encoded);
     await prefs.setInt('index', index + 1);
-    print('saved');
   }
 
   void getQuestions() {
-    // create 4 separate maps corresponding to each category
-    // convert each map to a list of its questions
-    // select 2 questions from each list and add them to questionLIst
-    // add the corresponding category twice.
-    //
     List<String> mindset = _questionMap['Mindset']!.toList();
     List<String> energy = _questionMap['Energy']!.toList();
     List<String> performance = _questionMap['Performance']!.toList();
@@ -238,15 +231,6 @@ class QuestionsState extends State<Questions> {
 
     _questionList.addAll(drive.sublist(0, 1));
     _categoryList.addAll(['Drive']);
-
-    // print('today\'s question list: ' + _questionList.toString());
-
-    // var keys = _questionMap.keys.toList()..shuffle();
-    // if (_questionList.length < numQuestions) {
-    //   for (var k in keys) {
-    //     _questionList.add(k);
-    //   }
-    // }
   }
 
   Node packData(double rating, String question, String category) {
@@ -262,7 +246,6 @@ class QuestionsState extends State<Questions> {
   Widget build(BuildContext context) {
     getQuestions();
     currQuestion = _questionList[questionIndex];
-
     currCategory = _categoryList[questionIndex];
 
     return Scaffold(

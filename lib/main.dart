@@ -46,8 +46,8 @@ class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
   void updateTree() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    int startIndex = prefs.getInt('index') ?? 0;
+    // final SharedPreferences prefs = await SharedPreferences.getInstance();
+    // int startIndex = prefs.getInt('index') ?? 0;
     //todo get the next 5 frames
     // then initialize a timer
     //set state to update tree location
