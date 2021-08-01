@@ -1,8 +1,16 @@
+import 'dart:io';
+import 'package:flutter/services.dart';
+import "package:path/path.dart" show dirname;
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import './question.dart';
 import './user_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:csv/csv.dart';
+import 'dart:async';
+import 'dart:convert';
 
 class Questions extends StatefulWidget {
   @override
@@ -202,7 +210,6 @@ class QuestionsState extends State<Questions> {
   }
 
   void getQuestions() {
-    fillQuestions();
     List<String> mindset = _questionMap['Mindset']!.toList();
     List<String> energy = _questionMap['Energy']!.toList();
     List<String> performance = _questionMap['Performance']!.toList();
@@ -224,6 +231,7 @@ class QuestionsState extends State<Questions> {
 
     _questionList.addAll(drive.sublist(0, 1));
     _categoryList.addAll(['Drive']);
+    print('2');
   }
 
   Node packData(double rating, String question, String category) {
@@ -239,6 +247,7 @@ class QuestionsState extends State<Questions> {
 
   @override
   Widget build(BuildContext context) {
+    fillQuestions();
     getQuestions();
     currQuestion = _questionList[questionIndex];
     currCategory = _categoryList[questionIndex];
@@ -409,9 +418,16 @@ class QuestionsState extends State<Questions> {
     );
   }
 
-  void fillQuestions() {
-    // var questions =
-    //     File('data/questionfinaldata.csv').readAsLinesSync().skip(1);
-    // print(questions.length);
+  Future fillQuestions() async {
+    final myData = await rootBundle.loadString('images/questionsdata.csv');
+    LineSplitter ls = new LineSplitter();
+    List<String> lines = ls.convert(myData);
+    lines.removeAt(0);
+    for (String line in lines) {
+      List split = line.split(',');
+      _questionMap[split[0]]!.add(split[1]);
+    }
+    print('1');
+    return _questionMap.length;
   }
 }
