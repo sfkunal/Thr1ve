@@ -49,6 +49,7 @@ dev_dependencies:
 flutter:
   assets: 
     - images/
+    - data/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
@@ -75,8 +76,10 @@ flutter:
     - family: Naturaling
       fonts:
         - asset: fonts/NaturalingBold.ttf
-        # - asset: fonts/NaturalingItalic.ttf
-        #   style: italic
+    - family: HKGrotesk
+      fonts:
+        - asset: fonts/HKGrotesk-MediumLegacy.ttf
+
   
   #
   # For details regarding fonts from package dependencies,

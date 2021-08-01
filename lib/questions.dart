@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import './question.dart';
@@ -38,23 +41,15 @@ class QuestionsState extends State<Questions> {
   Map<String, List<String>> _questionMap = {
     'Energy': [
       'How intense was your footwork today?',
-      'Rate your physical strength today',
-      'How conscious are you of what you eat?',
     ],
     'Mindset': [
       'How supported do you feel by coaches?',
-      'How easily are you able to consider constructive feedback?',
-      'How well did you stay calm during adversity?',
     ],
     'Drive': [
       'How much do you enjoy pushing your limits?',
-      'How much do you focus on results and outcomes?',
-      'How well do you think you will compete today?',
     ],
     'Performance': [
       'How well did your mindset support your performance today?',
-      'How much did you improve today?',
-      'How much do you feel like your training is heading in the right direction?',
     ],
   };
 
@@ -210,6 +205,7 @@ class QuestionsState extends State<Questions> {
   }
 
   void getQuestions() {
+    fillQuestions();
     List<String> mindset = _questionMap['Mindset']!.toList();
     List<String> energy = _questionMap['Energy']!.toList();
     List<String> performance = _questionMap['Performance']!.toList();
@@ -409,5 +405,11 @@ class QuestionsState extends State<Questions> {
         ),
       ),
     );
+  }
+
+  void fillQuestions() {
+    var questions =
+        File('data/questionfinaldata.csv').readAsLinesSync().skip(1);
+    print(questions.length);
   }
 }

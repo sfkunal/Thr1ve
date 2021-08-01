@@ -55,6 +55,15 @@ class _ScoreGraphState extends State<ScoreGraph> {
     return pastMonth;
   }
 
+  void _saveAvgs() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble('mindsetAvg', weekAvg(mindset));
+    await prefs.setDouble('energyAvg', weekAvg(energy));
+    await prefs.setDouble('performanceAvg', weekAvg(performance));
+    await prefs.setDouble('driveAvg', weekAvg(drive));
+    // print('saved');
+  }
+
   void _fill() {
     List<double> currMindset = [-1];
     List<double> currEnergy = [-1];
@@ -119,6 +128,7 @@ class _ScoreGraphState extends State<ScoreGraph> {
       driveData.add(new Point(i, drive[i]));
     }
 
+    _saveAvgs();
     // print('mindset: ' + mindset.toString());
     // print(weekAvg(mindset));
 
