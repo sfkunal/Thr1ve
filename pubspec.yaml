@@ -36,6 +36,7 @@ dependencies:
   shared_preferences: ^2.0.6
   syncfusion_flutter_charts: ^19.2.49
   fl_chart: ^0.36.3
+  youtube_player_flutter: ^8.0.0
 
 dev_dependencies:
   flutter_test:
@@ -76,9 +77,6 @@ flutter:
     - family: Naturaling
       fonts:
         - asset: fonts/NaturalingBold.ttf
-    - family: HKGrotesk
-      fonts:
-        - asset: fonts/HKGrotesk-MediumLegacy.ttf
 
   
   #

@@ -231,7 +231,7 @@ class _ScoreGraphState extends State<ScoreGraph> {
               ),
             ),
             SizedBox(
-                height: 246,
+                height: 266,
                 child: Column(
                   children: [
                     Container(
@@ -280,7 +280,7 @@ class _ScoreGraphState extends State<ScoreGraph> {
                       ),
                     ),
                     SizedBox(
-                      height: 10,
+                      height: 30,
                     ),
                     Text(
                       'Your 7-Day Averages:',

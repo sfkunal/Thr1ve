@@ -18,8 +18,9 @@ class Question extends StatelessWidget {
       decoration: BoxDecoration(color: Colors.indigo[100]),
       child: Text(
         question,
-        textScaleFactor: 2,
+        textScaleFactor: 2.3,
         textAlign: TextAlign.center,
+        style: TextStyle(fontWeight: FontWeight.bold),
       ),
     );
   }

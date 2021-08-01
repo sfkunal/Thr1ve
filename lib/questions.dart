@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import './question.dart';
@@ -238,6 +235,8 @@ class QuestionsState extends State<Questions> {
     return n;
   }
 
+  String logo = 'images/logo.png';
+
   @override
   Widget build(BuildContext context) {
     getQuestions();
@@ -247,7 +246,10 @@ class QuestionsState extends State<Questions> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Center(),
+        title: Image.asset(
+          logo,
+          scale: 3.2,
+        ),
       ),
       body: Column(children: [
         Question(currQuestion),
@@ -408,8 +410,8 @@ class QuestionsState extends State<Questions> {
   }
 
   void fillQuestions() {
-    var questions =
-        File('data/questionfinaldata.csv').readAsLinesSync().skip(1);
-    print(questions.length);
+    // var questions =
+    //     File('data/questionfinaldata.csv').readAsLinesSync().skip(1);
+    // print(questions.length);
   }
 }

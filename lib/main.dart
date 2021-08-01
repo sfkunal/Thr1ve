@@ -17,6 +17,7 @@ import 'package:flutter/services.dart';
 // git push
 
 void main() {
+  // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(MyApp());
 }
 

@@ -10,12 +10,15 @@ class Statistics extends StatefulWidget {
 }
 
 class _StatisticsState extends State<Statistics> {
+  String logo = 'images/logo.png';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-          child: Text(''),
+        title: Image.asset(
+          logo,
+          scale: 3.2,
         ),
       ),
       body: Center(
