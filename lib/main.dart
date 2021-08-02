@@ -1,8 +1,8 @@
-import 'dart:io';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import './questions.dart';
 import './statistics.dart';
 import './help.dart';
@@ -48,6 +48,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final bool enableAudio = false;
+  //remember to change to true
+  bool audio = true;
   final double imageScale = 1.5;
   final int startLevel = 56;
   final int endLevel = 1300;
@@ -161,15 +164,33 @@ class _MyHomePageState extends State<MyHomePage> {
     print(fromPathToId(fromIdToPath(n)) == n);
   }
 
-  String currTreeLoc = 'images/tree/01-10/tree01-10_056.jpg';
+  String currTreeLoc = 'images/tree/01-10/tree01-10_001.jpg';
   Image tree = Image.asset(
-    'images/tree/01-10/tree01-10_056.jpg',
+    'images/tree/01-10/tree01-10_001.jpg',
     scale: 1.45,
   );
 
+  String getEncourage() {
+    List shuffled = encourageList..shuffle();
+    return shuffled[0];
+  }
+
+  String getToday() {
+    final DateTime now = DateTime.now();
+    final DateFormat formatter = DateFormat('MM-dd-yyyy');
+    final String formatted = formatter.format(now);
+    List<String> date = formatted.split('-');
+    String answer = Data.months[date[0]].toString() +
+        ' ' +
+        int.parse(date[1]).toString() +
+        ', ' +
+        date[2].toString();
+    return answer;
+  }
+
   void updateTree() {
     int currLevel = fromPathToId(currTreeLoc);
-    print(currLevel);
+    // print(currLevel);
     setState(() {
       tree = Image.asset(fromIdToPath(currLevel + 5), scale: 1.45);
       currTreeLoc = fromIdToPath(currLevel + 5);
@@ -194,26 +215,50 @@ class _MyHomePageState extends State<MyHomePage> {
     //do above 2 lines for each frame.
   }
 
-  String getEncourage() {
-    List shuffled = encourageList..shuffle();
-    return shuffled[0];
+  Future readAccountLevel() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    int index = prefs.getInt('index') ?? 0;
+    print('Account Level: ' + index.toString());
+    return index;
   }
 
-  String getToday() {
-    final DateTime now = DateTime.now();
-    final DateFormat formatter = DateFormat('MM-dd-yyyy');
-    final String formatted = formatter.format(now);
-    List<String> date = formatted.split('-');
-    String answer = Data.months[date[0]].toString() +
-        ' ' +
-        int.parse(date[1]).toString() +
-        ', ' +
-        date[2].toString();
-    return answer;
+  AudioPlayer instance = new AudioPlayer();
+  AudioCache musicCache = AudioCache(prefix: "audio/");
+
+  void playLoopedMusic() async {
+    instance = await musicCache.loop("natureaudio.mp3");
+    // await instance.setVolume(0.5); you can even set the volume
+  }
+
+  void pauseMusic() {
+    if (instance != null) {
+      instance.pause();
+    }
+  }
+
+  Icon displayVol() {
+    if (audio == true) {
+      if (enableAudio) {
+        playLoopedMusic();
+      }
+      return Icon(
+        Icons.volume_up,
+        color: Colors.white,
+      );
+    } else {
+      if (enableAudio) {
+        instance.pause();
+      }
+      return Icon(
+        Icons.volume_off,
+        color: Colors.white,
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    readAccountLevel();
     return Scaffold(
       backgroundColor: Colors.deepPurple.shade400,
       appBar: AppBar(
@@ -267,7 +312,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   Text(
                     getToday(),
                     textScaleFactor: 3.4,
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
                   )
                 ],
               ),
@@ -279,12 +325,12 @@ class _MyHomePageState extends State<MyHomePage> {
           child: tree,
         ),
         Positioned(
-            top: 515.0,
+            top: 440.0,
             right: 0.0,
             child: Column(
               children: [
                 IconButton(
-                    iconSize: 50,
+                    iconSize: 40,
                     onPressed: () {
                       HapticFeedback.heavyImpact();
                       Navigator.push(context,
@@ -300,6 +346,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 )
               ],
             )),
+        Positioned(
+            right: 0,
+            child: IconButton(
+              icon: displayVol(),
+              onPressed: () {
+                setState(() {
+                  audio = !audio;
+                });
+              },
+            ))
       ]),
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: true,

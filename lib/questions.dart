@@ -1,13 +1,9 @@
 import 'package:flutter/services.dart';
-import "package:path/path.dart" show dirname;
-import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import './question.dart';
 import './user_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:csv/csv.dart';
 import 'dart:async';
 import 'dart:convert';
 
@@ -230,7 +226,7 @@ class QuestionsState extends State<Questions> {
 
     _questionList.addAll(drive.sublist(0, 1));
     _categoryList.addAll(['Drive']);
-    print('2');
+    // print('2');
   }
 
   Node packData(double rating, String question, String category) {
@@ -426,7 +422,7 @@ class QuestionsState extends State<Questions> {
       List split = line.split(',');
       _questionMap[split[0]]!.add(split[1]);
     }
-    print('1');
+    // print('1');
     return _questionMap.length;
   }
 }
