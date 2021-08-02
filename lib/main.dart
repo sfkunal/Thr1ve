@@ -47,6 +47,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final int startLevel = 56;
+  final int endLevel = 1300;
   String encourage = '';
   List<String> encourageList = [
     'You keep improving. Insane!',
@@ -65,16 +67,41 @@ class _MyHomePageState extends State<MyHomePage> {
     return id;
   }
 
+  //180   200   200   200   200   200   140
+  //1-10 10-20 20-30 30-40 40-50 50-60 60-74
+  String getMidFolder(int level) {
+    if (level > 0 && level < 1320) {
+      if (level < 180) {
+        return '1-10';
+      } else if (level < 380) {
+        return '10-20';
+      } else if (level < 580) {
+        return '20-30';
+      } else if (level < 780) {
+        return '30-40';
+      } else if (level < 980) {
+        return '40-50';
+      } else if (level < 1180) {
+        return '50-60';
+      } else {
+        return '60-74';
+      }
+    } else {
+      return 'error';
+    }
+  }
+
   String fromIdToPath(int id) {
+    String midFolder = '';
     String textId = '';
-    if (id < 10) {
+    if (id < 180) {
       textId = '00$id';
     } else if (id < 100) {
       textId = '0$id';
     } else {
       textId = id.toString();
     }
-    String path = 'images/frame_' + textId + '.png';
+    String path = 'images/frame_' + textId + '.jpg';
     return path;
   }
   // images/tree/1-10/tree0-10_056.jpg
@@ -160,11 +187,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   // iconSize: 45, onPressed: () {}, icon: Icon(Icons.back_plan)),
                 ],
               ),
-              SizedBox(
-                width: 300,
-                height: 300,
-                child: tree,
-              ),
+              tree,
             ],
           ),
         ),
