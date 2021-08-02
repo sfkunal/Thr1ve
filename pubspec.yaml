@@ -50,6 +50,13 @@ dev_dependencies:
 flutter:
   assets: 
     - images/
+    - images/tree/1-10/
+    - images/tree/10-20/
+    - images/tree/20-30/
+    - images/tree/30-40/
+    - images/tree/40-50/
+    - images/tree/50-60/
+    - images/tree/60-74/
     - images/questionsdata.csv
 
   # The following line ensures that the Material Icons font is

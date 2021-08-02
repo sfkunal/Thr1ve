@@ -47,7 +47,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String treeLocation = 'images/frame_010.png';
   String encourage = '';
   List<String> encourageList = [
     'You keep improving. Insane!',
@@ -58,15 +57,50 @@ class _MyHomePageState extends State<MyHomePage> {
 
   int _selectedIndex = 0;
 
-  void updateTree() {
-    for (int i = 10; i < 100; i++) {
-      setState(() {
-        treeLocation = 'images/frame_0$i.png';
-      });
-      sleep(Duration(milliseconds: 1000));
-      print('done');
+  int fromPathToId(String path) {
+    List spl = path.split('.');
+    String textId = spl[0].toString().substring(13);
+    int id = int.parse(textId);
+    print(id);
+    return id;
+  }
+
+  String fromIdToPath(int id) {
+    String textId = '';
+    if (id < 10) {
+      textId = '00$id';
+    } else if (id < 100) {
+      textId = '0$id';
+    } else {
+      textId = id.toString();
     }
-    print('done');
+    String path = 'images/frame_' + textId + '.png';
+    return path;
+  }
+  // images/tree/1-10/tree0-10_056.jpg
+
+  String currTreeLoc = 'images/tree/1-10/tree0-10_056.jpg';
+  Image tree = Image.asset(
+    'images/tree/1-10/tree1-10_056.jpg',
+  );
+
+  void updateTree() {
+    // int currLevel = fromPathToId(currTreeLoc);
+    // print(currLevel);
+    // setState(() {
+    //   tree = Image.asset(fromIdToPath(currLevel + 1));
+    //   currTreeLoc = fromIdToPath(currLevel + 1);
+    // });
+    // for (int i = 10; i < 100; i++) {
+    //   setState(() {
+    //     // treeLocation = 'images/frame_0$i.png';
+    //     // tree
+    //   });
+    //   sleep(Duration(milliseconds: 1000));
+    //   print('done');
+    // }
+    // print('done');
+
     // final SharedPreferences prefs = await SharedPreferences.getInstance();
     // int startIndex = prefs.getInt('index') ?? 0;
     // print('level: ' + startIndex.toString());
@@ -84,7 +118,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // updateTree();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -113,11 +146,25 @@ class _MyHomePageState extends State<MyHomePage> {
                 getEncourage(),
                 textScaleFactor: 3,
               ),
-              SizedBox(height: 200),
-              Image.asset(
-                treeLocation,
-                scale: .001,
-              )
+              SizedBox(height: 100),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  IconButton(
+                      iconSize: 45,
+                      onPressed: () {
+                        updateTree();
+                      },
+                      icon: Icon(Icons.next_plan)),
+                  // IconButton(
+                  // iconSize: 45, onPressed: () {}, icon: Icon(Icons.back_plan)),
+                ],
+              ),
+              SizedBox(
+                width: 300,
+                height: 300,
+                child: tree,
+              ),
             ],
           ),
         ),
