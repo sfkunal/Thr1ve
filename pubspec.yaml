@@ -50,7 +50,7 @@ dev_dependencies:
 flutter:
   assets: 
     - images/
-    - images/tree/1-10/
+    - images/tree/01-10/
     - images/tree/10-20/
     - images/tree/20-30/
     - images/tree/30-40/

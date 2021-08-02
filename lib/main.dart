@@ -1,10 +1,12 @@
 import 'dart:io';
+import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 import './questions.dart';
 import './statistics.dart';
 import './help.dart';
+import 'datasets.dart';
 import 'tips.dart';
 import 'package:flutter/services.dart';
 
@@ -17,7 +19,6 @@ import 'package:flutter/services.dart';
 // git push
 
 void main() {
-  // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(MyApp());
 }
 
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.deepPurple,
         fontFamily: 'Naturaling',
       ),
-      home: MyHomePage(title: 'Home Thr1ve'),
+      home: MyHomePage(title: ''),
     );
   }
 }
@@ -47,6 +48,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final double imageScale = 1.5;
   final int startLevel = 56;
   final int endLevel = 1300;
   String encourage = '';
@@ -59,20 +61,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   int _selectedIndex = 0;
 
-  int fromPathToId(String path) {
-    List spl = path.split('.');
-    String textId = spl[0].toString().substring(13);
-    int id = int.parse(textId);
-    print(id);
-    return id;
-  }
-
   //180   200   200   200   200   200   140
   //1-10 10-20 20-30 30-40 40-50 50-60 60-74
   String getMidFolder(int level) {
     if (level > 0 && level < 1320) {
       if (level < 180) {
-        return '1-10';
+        return '01-10';
       } else if (level < 380) {
         return '10-20';
       } else if (level < 580) {
@@ -91,33 +85,95 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  String fromIdToPath(int id) {
-    String midFolder = '';
-    String textId = '';
-    if (id < 180) {
-      textId = '00$id';
+  String to3digit(int id) {
+    if (id < 10) {
+      return '00$id';
     } else if (id < 100) {
-      textId = '0$id';
-    } else {
-      textId = id.toString();
+      return '0$id';
+    } else
+      return id.toString();
+  }
+
+  int calcRemainderId(int id) {
+    if (id > 0 && id < 1320) {
+      if (id < 180) {
+        return id;
+      } else if (id < 380) {
+        return id - 180;
+      } else if (id < 580) {
+        return id - 380;
+      } else if (id < 780) {
+        return id - 580;
+      } else if (id < 980) {
+        return id - 780;
+      } else if (id < 1180) {
+        return id - 980;
+      } else {
+        return id - 1180;
+      }
     }
-    String path = 'images/frame_' + textId + '.jpg';
+    return -1;
+  }
+
+  String fromIdToPath(int id) {
+    String head = 'images/tree/';
+    String midFolder = getMidFolder(id);
+    String body = '/tree';
+    String textId = to3digit(calcRemainderId(id));
+    String path = head + midFolder + body + midFolder + '_' + textId + '.jpg';
     return path;
   }
-  // images/tree/1-10/tree0-10_056.jpg
 
-  String currTreeLoc = 'images/tree/1-10/tree0-10_056.jpg';
+  int fromPathToId(String path) {
+    int base = 0;
+    String midFolder = path.split('/')[2];
+    // print(midFolder);
+    switch (midFolder) {
+      case '01-10':
+        base += 0;
+        break;
+      case '10-20':
+        base += 180;
+        break;
+      case '20-30':
+        base += 380;
+        break;
+      case '30-40':
+        base += 580;
+        break;
+      case '40-50':
+        base += 780;
+        break;
+      case '50-60':
+        base += 980;
+        break;
+      case '60-74':
+        base += 1180;
+        break;
+    }
+    String id = path.split('.')[0].substring(28);
+    int fin = int.parse(id);
+    return fin + base;
+  }
+  // images/tree/01-10/tree01-10_056.jpg
+
+  void test(int n) {
+    print(fromPathToId(fromIdToPath(n)) == n);
+  }
+
+  String currTreeLoc = 'images/tree/01-10/tree01-10_056.jpg';
   Image tree = Image.asset(
-    'images/tree/1-10/tree1-10_056.jpg',
+    'images/tree/01-10/tree01-10_056.jpg',
+    scale: 1.45,
   );
 
   void updateTree() {
-    // int currLevel = fromPathToId(currTreeLoc);
-    // print(currLevel);
-    // setState(() {
-    //   tree = Image.asset(fromIdToPath(currLevel + 1));
-    //   currTreeLoc = fromIdToPath(currLevel + 1);
-    // });
+    int currLevel = fromPathToId(currTreeLoc);
+    print(currLevel);
+    setState(() {
+      tree = Image.asset(fromIdToPath(currLevel + 5), scale: 1.45);
+      currTreeLoc = fromIdToPath(currLevel + 5);
+    });
     // for (int i = 10; i < 100; i++) {
     //   setState(() {
     //     // treeLocation = 'images/frame_0$i.png';
@@ -143,10 +199,23 @@ class _MyHomePageState extends State<MyHomePage> {
     return shuffled[0];
   }
 
+  String getToday() {
+    final DateTime now = DateTime.now();
+    final DateFormat formatter = DateFormat('MM-dd-yyyy');
+    final String formatted = formatter.format(now);
+    List<String> date = formatted.split('-');
+    String answer = Data.months[date[0]].toString() +
+        ' ' +
+        int.parse(date[1]).toString() +
+        ', ' +
+        date[2].toString();
+    return answer;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.deepPurple.shade400,
       appBar: AppBar(
         leading: Row(
           children: [
@@ -168,31 +237,49 @@ class _MyHomePageState extends State<MyHomePage> {
         Center(
           child: Column(
             children: [
-              SizedBox(height: 20),
+              SizedBox(height: 50),
               Text(
                 getEncourage(),
                 textScaleFactor: 3,
+                style: TextStyle(color: Colors.white),
               ),
-              SizedBox(height: 100),
+              SizedBox(height: 40),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   IconButton(
-                      iconSize: 45,
-                      onPressed: () {
-                        updateTree();
-                      },
-                      icon: Icon(Icons.next_plan)),
+                    iconSize: 45,
+                    onPressed: () {
+                      updateTree();
+                    },
+                    icon: Icon(Icons.next_plan),
+                  ),
                   // IconButton(
                   // iconSize: 45, onPressed: () {}, icon: Icon(Icons.back_plan)),
                 ],
               ),
-              tree,
+              SizedBox(height: 275),
+              Column(
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    getToday(),
+                    textScaleFactor: 3.4,
+                    style: TextStyle(color: Colors.white),
+                  )
+                ],
+              ),
             ],
           ),
         ),
         Positioned(
-            top: 500.0,
+          top: 200,
+          child: tree,
+        ),
+        Positioned(
+            top: 515.0,
             right: 0.0,
             child: Column(
               children: [
@@ -205,9 +292,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     },
                     icon: Icon(
                       Icons.lightbulb_outline_sharp,
-                      color: Colors.deepPurple,
+                      color: Colors.white,
                     )),
-                Text('tips')
+                Text(
+                  'tips',
+                  style: TextStyle(color: Colors.white),
+                )
               ],
             )),
       ]),
