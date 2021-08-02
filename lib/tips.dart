@@ -3,6 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
+import 'datasets.dart';
+
 class Tips extends StatefulWidget {
   @override
   _TipsState createState() => _TipsState();
@@ -10,9 +12,10 @@ class Tips extends StatefulWidget {
 
 class _TipsState extends State<Tips> {
   List avgs = [];
-  String weakestCategory = '';
+  String weakestCategory = 'Mindset';
   String logo = 'images/logo.png';
-  String id = '';
+  String id = '2W7POjFb88g';
+  String currUrl = 'https://www.youtube.com/watch?v=2W7POjFb88g';
 
   void readAvgs() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -22,26 +25,33 @@ class _TipsState extends State<Tips> {
     avgs.add(prefs.getDouble('driveAvg'));
     double smallest = avgs.cast<double>().reduce(min);
     int indexOfSmallest = avgs.indexOf(smallest);
-
     switch (indexOfSmallest) {
       case 0:
         setState(() {
           weakestCategory = 'Mindset';
+          List l = Data.mindsetVids..shuffle();
+          currUrl = l.first;
         });
         break;
       case 1:
         setState(() {
           weakestCategory = 'Energy';
+          List l = Data.energyVids..shuffle();
+          currUrl = l.first;
         });
         break;
       case 2:
         setState(() {
           weakestCategory = 'Performance';
+          List l = Data.performanceVids..shuffle();
+          currUrl = l.first;
         });
         break;
       case 3:
         setState(() {
           weakestCategory = 'Drive';
+          List l = Data.driveVids..shuffle();
+          currUrl = l.first;
         });
         break;
     }
@@ -89,11 +99,7 @@ class _TipsState extends State<Tips> {
     );
   }
 
-  Widget videoTip(String url) {
-    String newId = YoutubePlayer.convertUrlToId(url).toString();
-    setState(() {
-      id = newId;
-    });
+  Widget videoTip() {
     return Column(
       children: [
         SizedBox(
@@ -105,7 +111,7 @@ class _TipsState extends State<Tips> {
         ),
         YoutubePlayer(
           controller: YoutubePlayerController(
-            initialVideoId: id,
+            initialVideoId: YoutubePlayer.convertUrlToId(currUrl).toString(),
             flags: YoutubePlayerFlags(
               autoPlay: true,
               mute: true,
@@ -154,7 +160,7 @@ class _TipsState extends State<Tips> {
             SizedBox(
               height: 50,
             ),
-            videoTip('https://www.youtube.com/watch?v=kO1kgl0p-Hw'),
+            videoTip(),
             // quoteTip(
             //     '“Winning is not a sometime thing; it’s an all time thing. You don’t win once in a while, you don’t do things right once in a while, you do them right all the time. Winning is habit. Unfortunately, so is losing.”',
             //     'Vince Lombardi'),

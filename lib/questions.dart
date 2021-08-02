@@ -19,8 +19,7 @@ class QuestionsState extends State<Questions> {
   var _answerList = [];
   var rating = 5.0;
   var numQuestions = 4;
-  var questionIndex = 0;
-
+  var questionIndex = -1;
   String encourage = 'Start your daily check-in!';
 
   List getAnswerList() {
@@ -38,7 +37,7 @@ class QuestionsState extends State<Questions> {
     'great': 'Keep Thr1ving!',
   };
 
-  Map<String, List<String>> _questionMap = {
+  Map<String, List<String>> questionMap = {
     'Energy': [
       'How intense was your footwork today?',
     ],
@@ -205,10 +204,10 @@ class QuestionsState extends State<Questions> {
   }
 
   void getQuestions() {
-    List<String> mindset = _questionMap['Mindset']!.toList();
-    List<String> energy = _questionMap['Energy']!.toList();
-    List<String> performance = _questionMap['Performance']!.toList();
-    List<String> drive = _questionMap['Drive']!.toList();
+    List<String> mindset = questionMap['Mindset']!.toList();
+    List<String> energy = questionMap['Energy']!.toList();
+    List<String> performance = questionMap['Performance']!.toList();
+    List<String> drive = questionMap['Drive']!.toList();
 
     mindset..shuffle();
     energy..shuffle();
@@ -226,7 +225,6 @@ class QuestionsState extends State<Questions> {
 
     _questionList.addAll(drive.sublist(0, 1));
     _categoryList.addAll(['Drive']);
-    // print('2');
   }
 
   Node packData(double rating, String question, String category) {
@@ -238,179 +236,241 @@ class QuestionsState extends State<Questions> {
     return n;
   }
 
+  void setQuestionMap(Map<String, List<String>> map) {
+    // map.forEach((category, question) {
+    //   if (questionMap.containsKey(category)) {
+    //     questionMap[category]!.add(question);
+    //   } else {
+    //     questionMap[category] = [];
+    //     questionMap[category]!.add(question);
+    //   }
+    // });
+    questionMap = map;
+  }
+
   String logo = 'images/logo.png';
 
-  @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     fillQuestions();
-    getQuestions();
-    currQuestion = _questionList[questionIndex];
-    currCategory = _categoryList[questionIndex];
+  }
 
+  Widget readyPage() {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Image.asset(
-          logo,
-          scale: 3.2,
-        ),
-      ),
-      body: Column(children: [
-        Question(currQuestion),
-        Column(
+      appBar: AppBar(),
+      backgroundColor: Colors.deepPurple,
+      body: Center(
+        child: Column(
           children: [
-            Container(
-              padding: EdgeInsets.only(
-                left: 0,
-                right: 0,
-                top: 20,
-                bottom: 0,
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      terrible,
-                      sad,
-                      neutral,
-                      happy,
-                      great,
-                    ],
-                  ),
-                  SizedBox(
-                    height: 45,
-                  ),
-                  Text(
-                    rating.toInt().toString(),
-                    textScaleFactor: 5,
-                  ),
-                  SizedBox(
-                    height: 35,
-                  ),
-                  Container(
-                    child: Text(
-                      encourage,
-                      textScaleFactor: 3,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  SizedBox(
-                    width: 370,
-                    height: 100,
-                    child: CupertinoSlider(
-                      value: rating,
-                      onChanged: (newRating) {
-                        imageUpdate(newRating);
-                        setState(() => rating = newRating);
-                        encourageText('neutral');
-                        if (rating >= 0) {
-                          setState(() {
-                            encourageText('terrible');
-                          });
-                        }
-                        if (rating > 2) {
-                          setState(() {
-                            encourageText('sad');
-                          });
-                        }
-                        if (rating > 4) {
-                          setState(() {
-                            encourageText('neutral');
-                          });
-                        }
-                        if (rating > 6) {
-                          setState(() {
-                            encourageText('happy');
-                          });
-                        }
-                        if (rating > 8) {
-                          setState(() {
-                            encourageText('great');
-                          });
-                        }
-                      },
-                      min: 0,
-                      max: 10,
-                      divisions: 10,
-                      thumbColor: Colors.black,
-                    ),
-                  ),
-                ],
+            SizedBox(
+              height: 200,
+            ),
+            Text(
+              'Get in the zone. Check in now.',
+              textAlign: TextAlign.center,
+              textScaleFactor: 4,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
               ),
             ),
             SizedBox(
-              height: 20,
+              height: 100,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                getProgressIcon(1),
-                getProgressIcon(2),
-                getProgressIcon(3),
-                getProgressIcon(4),
-              ],
-            )
-          ],
-        ),
-      ]),
-      bottomNavigationBar: new Theme(
-        data: Theme.of(context).copyWith(
-          canvasColor: Colors.deepPurple,
-        ),
-        child: BottomNavigationBar(
-          items: [
-            BottomNavigationBarItem(
-              label: '',
-              icon: IconButton(
-                  iconSize: 40,
-                  onPressed: () {
-                    if (questionIndex > 0) {
-                      setState(() {
-                        questionIndex = questionIndex - 1;
-                      });
-                    }
-                  },
-                  icon: Icon(
-                    Icons.arrow_back_ios,
+            IconButton(
+                onPressed: () {
+                  setState(() {
+                    questionIndex++;
+                  });
+                },
+                icon: SizedBox(
+                  height: 100,
+                  width: 100,
+                  child: new Image.asset(
+                    logo,
                     color: Colors.white,
-                  )),
-            ),
-            BottomNavigationBarItem(
-              label: '',
-              icon: IconButton(
-                  iconSize: 40,
-                  onPressed: () {
-                    if (questionIndex < numQuestions) {
-                      answers.add(new Node(
-                        rating: rating,
-                        question: currQuestion,
-                        category: currCategory,
-                      ));
-                      packData(rating, currQuestion, currCategory);
-                      setState(() {
-                        questionIndex = questionIndex + 1;
-                        _answerList.add(rating);
-                        if (questionIndex == numQuestions) {
-                          questionIndex = 0;
-                          _save(answers);
-                          Navigator.pop(context);
-                        }
-                      });
-                    }
-                  },
-                  icon: Icon(
-                    Icons.arrow_forward_ios,
-                    color: Colors.white,
-                  )),
-            ),
+                  ),
+                ))
           ],
         ),
       ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (questionIndex == -1) {
+      return readyPage();
+    } else {
+      getQuestions();
+      currQuestion = _questionList[questionIndex];
+      currCategory = _categoryList[questionIndex];
+      return Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: Image.asset(
+            logo,
+            scale: 3.2,
+          ),
+        ),
+        body: Column(children: [
+          Question(currQuestion),
+          Column(
+            children: [
+              Container(
+                padding: EdgeInsets.only(
+                  left: 0,
+                  right: 0,
+                  top: 10,
+                  bottom: 0,
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        terrible,
+                        sad,
+                        neutral,
+                        happy,
+                        great,
+                      ],
+                    ),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    Text(
+                      rating.toInt().toString(),
+                      textScaleFactor: 5,
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Container(
+                      child: Text(
+                        encourage,
+                        textScaleFactor: 3,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    SizedBox(
+                      width: 370,
+                      height: 100,
+                      child: CupertinoSlider(
+                        value: rating,
+                        onChanged: (newRating) {
+                          imageUpdate(newRating);
+                          setState(() => rating = newRating);
+                          encourageText('neutral');
+                          if (rating >= 0) {
+                            setState(() {
+                              encourageText('terrible');
+                            });
+                          }
+                          if (rating > 2) {
+                            setState(() {
+                              encourageText('sad');
+                            });
+                          }
+                          if (rating > 4) {
+                            setState(() {
+                              encourageText('neutral');
+                            });
+                          }
+                          if (rating > 6) {
+                            setState(() {
+                              encourageText('happy');
+                            });
+                          }
+                          if (rating > 8) {
+                            setState(() {
+                              encourageText('great');
+                            });
+                          }
+                        },
+                        min: 0,
+                        max: 10,
+                        divisions: 10,
+                        thumbColor: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  getProgressIcon(1),
+                  getProgressIcon(2),
+                  getProgressIcon(3),
+                  getProgressIcon(4),
+                ],
+              )
+            ],
+          ),
+        ]),
+        bottomNavigationBar: new Theme(
+          data: Theme.of(context).copyWith(
+            canvasColor: Colors.deepPurple,
+          ),
+          child: BottomNavigationBar(
+            items: [
+              BottomNavigationBarItem(
+                label: '',
+                icon: IconButton(
+                    iconSize: 40,
+                    onPressed: () {
+                      if (questionIndex > 0) {
+                        setState(() {
+                          questionIndex = questionIndex - 1;
+                          answers.removeLast();
+                        });
+                      }
+                    },
+                    icon: Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.white,
+                    )),
+              ),
+              BottomNavigationBarItem(
+                label: '',
+                icon: IconButton(
+                    iconSize: 40,
+                    onPressed: () {
+                      if (questionIndex < numQuestions) {
+                        answers.add(new Node(
+                          rating: rating,
+                          question: currQuestion,
+                          category: currCategory,
+                        ));
+                        packData(rating, currQuestion, currCategory);
+                        setState(() {
+                          questionIndex = questionIndex + 1;
+                          _answerList.add(rating);
+                          if (questionIndex == numQuestions) {
+                            questionIndex = 0;
+                            _save(answers);
+                            Navigator.pop(context, questionIndex);
+                          }
+                        });
+                      }
+                    },
+                    icon: Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.white,
+                    )),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
   }
 
   Future fillQuestions() async {
@@ -420,9 +480,8 @@ class QuestionsState extends State<Questions> {
     lines.removeAt(0);
     for (String line in lines) {
       List split = line.split(',');
-      _questionMap[split[0]]!.add(split[1]);
+      questionMap[split[0]]!.add(split[1]);
     }
-    // print('1');
-    return _questionMap.length;
+    return questionMap;
   }
 }

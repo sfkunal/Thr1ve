@@ -1,4 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:image_sequence_animator/image_sequence_animator.dart';
 import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
@@ -48,17 +49,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Questions questionPage = new Questions();
   final bool enableAudio = false;
   //remember to change to true
   bool audio = true;
   final double imageScale = 1.5;
   final int startLevel = 56;
   final int endLevel = 1300;
+  String logo = 'images/logo.png';
   String encourage = '';
   List<String> encourageList = [
     'You keep improving. Insane!',
-    'The next GOAT. Thr1ve way.',
-    'Stack these leaves!',
+    'The next GOAT. Thr1ve away.',
+    'Stack those leaves!',
     'You\'re on fire!',
   ];
 
@@ -90,6 +93,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   String to3digit(int id) {
     if (id < 10) {
+      if (id == 0) {
+        return '001';
+      }
       return '00$id';
     } else if (id < 100) {
       return '0$id';
@@ -160,10 +166,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   // images/tree/01-10/tree01-10_056.jpg
 
-  void test(int n) {
-    print(fromPathToId(fromIdToPath(n)) == n);
-  }
-
   String currTreeLoc = 'images/tree/01-10/tree01-10_001.jpg';
   Image tree = Image.asset(
     'images/tree/01-10/tree01-10_001.jpg',
@@ -180,46 +182,17 @@ class _MyHomePageState extends State<MyHomePage> {
     final DateFormat formatter = DateFormat('MM-dd-yyyy');
     final String formatted = formatter.format(now);
     List<String> date = formatted.split('-');
-    String answer = Data.months[date[0]].toString() +
-        ' ' +
-        int.parse(date[1]).toString() +
-        ', ' +
-        date[2].toString();
+    String answer =
+        Data.months[date[0]].toString() + ' ' + int.parse(date[1]).toString();
     return answer;
   }
 
-  void updateTree() {
-    int currLevel = fromPathToId(currTreeLoc);
-    // print(currLevel);
-    setState(() {
-      tree = Image.asset(fromIdToPath(currLevel + 5), scale: 1.45);
-      currTreeLoc = fromIdToPath(currLevel + 5);
-    });
-    // for (int i = 10; i < 100; i++) {
-    //   setState(() {
-    //     // treeLocation = 'images/frame_0$i.png';
-    //     // tree
-    //   });
-    //   sleep(Duration(milliseconds: 1000));
-    //   print('done');
-    // }
-    // print('done');
-
-    // final SharedPreferences prefs = await SharedPreferences.getInstance();
-    // int startIndex = prefs.getInt('index') ?? 0;
-    // print('level: ' + startIndex.toString());
-    //todo get the next 5 frames
-    // then initialize a timer
-    //set state to update tree location
-    //pause the timer for .1 sec
-    //do above 2 lines for each frame.
-  }
-
-  Future readAccountLevel() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    int index = prefs.getInt('index') ?? 0;
-    print('Account Level: ' + index.toString());
-    return index;
+  String getYear() {
+    final DateTime now = DateTime.now();
+    final DateFormat formatter = DateFormat('MM-dd-yyyy');
+    final String formatted = formatter.format(now);
+    List<String> date = formatted.split('-');
+    return date[2];
   }
 
   AudioPlayer instance = new AudioPlayer();
@@ -256,81 +229,129 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  Future readAccountLevel() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    int index = prefs.getInt('index') ?? 0;
+    print('read account Level: ' + index.toString());
+    return index;
+  }
+
+  Future addAccountLevel() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    int index = prefs.getInt('index') ?? 0;
+    print('read account Level: ' + index.toString());
+    prefs..setInt('index', index + 1);
+    print('saved new level as ' + (index + 1).toString());
+    return index + 1;
+  }
+
+  List<String> fullPaths = [];
+  List<String> addPaths(int startframe, int endframe) {
+    for (int i = startframe; i < endframe; i++) {
+      fullPaths.add(fromIdToPath(i));
+    }
+    return fullPaths;
+  }
+
+  void initState() {
+    super.initState();
+    encourage = getEncourage();
+  }
+
   @override
   Widget build(BuildContext context) {
-    readAccountLevel();
     return Scaffold(
       backgroundColor: Colors.deepPurple.shade400,
       appBar: AppBar(
-        leading: Row(
-          children: [
-            IconButton(
-              icon: Icon(Icons.help_outline),
-              onPressed: () {
-                Navigator.push(context,
-                    new MaterialPageRoute(builder: (ctxt) => new Help()));
-              },
-            ),
-          ],
-        ),
-        title: Text(
-          widget.title,
-          textAlign: TextAlign.center,
-        ),
-      ),
+          leading: Row(
+            children: [
+              IconButton(
+                icon: Icon(Icons.help_outline),
+                onPressed: () {
+                  Navigator.push(context,
+                      new MaterialPageRoute(builder: (ctxt) => new Help()));
+                },
+              ),
+            ],
+          ),
+          title: new Image.asset(
+            logo,
+            scale: 3.2,
+          )),
       body: Stack(children: [
         Center(
           child: Column(
             children: [
-              SizedBox(height: 50),
+              SizedBox(height: 180),
+              Container(
+                height: 20,
+                color: Colors.black,
+              ),
+              ImageSequenceAnimator(
+                "assets/ImageSequence",
+                "Frame_",
+                0,
+                5,
+                "jpg",
+                5,
+                key: Key("offline"),
+                fullPaths: addPaths(1, 1300),
+              ),
+              Container(
+                height: 20,
+                color: Colors.black,
+              ),
+              SizedBox(height: 15),
+            ],
+          ),
+        ),
+        Center(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 470,
+              ),
               Text(
-                getEncourage(),
-                textScaleFactor: 3,
-                style: TextStyle(color: Colors.white),
+                getToday(),
+                textScaleFactor: 3.9,
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 40),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  IconButton(
-                    iconSize: 45,
-                    onPressed: () {
-                      updateTree();
-                    },
-                    icon: Icon(Icons.next_plan),
+              Text(
+                getYear(),
+                textScaleFactor: 3.6,
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              )
+            ],
+          ),
+        ),
+        Center(
+          child: Column(
+            children: [
+              SizedBox(height: 45),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  encourage,
+                  textScaleFactor: 3.4,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
                   ),
-                  // IconButton(
-                  // iconSize: 45, onPressed: () {}, icon: Icon(Icons.back_plan)),
-                ],
-              ),
-              SizedBox(height: 275),
-              Column(
-                children: [
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    getToday(),
-                    textScaleFactor: 3.4,
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                  )
-                ],
-              ),
+                  textAlign: TextAlign.center,
+                ),
+              )
             ],
           ),
         ),
         Positioned(
-          top: 200,
-          child: tree,
-        ),
-        Positioned(
-            top: 440.0,
-            right: 0.0,
+            top: 470.0,
+            left: 0.0,
             child: Column(
               children: [
                 IconButton(
-                    iconSize: 40,
+                    iconSize: 32,
                     onPressed: () {
                       HapticFeedback.heavyImpact();
                       Navigator.push(context,
@@ -355,7 +376,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   audio = !audio;
                 });
               },
-            ))
+            )),
       ]),
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: true,
@@ -387,6 +408,7 @@ class _MyHomePageState extends State<MyHomePage> {
           if (_selectedIndex == 1) {
             Navigator.push(context,
                 new MaterialPageRoute(builder: (ctxt) => new Questions()));
+            // .then((value) => print('value'));
           }
           if (_selectedIndex == 2) {
             Navigator.push(context,

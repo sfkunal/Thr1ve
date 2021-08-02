@@ -19,6 +19,7 @@ class Question extends StatelessWidget {
       child: Text(
         question,
         textScaleFactor: 2.3,
+        maxLines: 3,
         textAlign: TextAlign.center,
         style: TextStyle(fontWeight: FontWeight.bold),
       ),
