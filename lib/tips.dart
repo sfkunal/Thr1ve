@@ -196,9 +196,7 @@ class _TipsState extends State<Tips> {
                 height: 30,
               ),
               Text(
-                'Thr1ve senses your ' +
-                    weakestCategory +
-                    ' could use some work!',
+                'I sense your ' + weakestCategory + ' could use some work!',
                 textScaleFactor: 3,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white),
@@ -213,18 +211,17 @@ class _TipsState extends State<Tips> {
             ],
           ),
         ),
-        Column(children: [
-          SizedBox(
-            height: 560,
-          ),
-          Container(
-            color: Colors.black,
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
+        Container(
+          child: Column(
+            children: [
+              Expanded(
+                child: Container(),
+              ),
+              // this will be you container
+              Container(
+                height: 150,
+                color: Colors.black,
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ClipRRect(
@@ -293,13 +290,10 @@ class _TipsState extends State<Tips> {
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 24,
-                )
-              ],
-            ),
+              )
+            ],
           ),
-        ])
+        ),
       ]),
     );
   }

@@ -49,7 +49,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   Questions questionPage = new Questions();
-  final bool enableAudio = false;
+  final bool enableAudio = true;
+  bool isSameDay = false;
   //remember to change to true
   bool audio = true;
   final double imageScale = 1.5;
@@ -65,6 +66,8 @@ class _MyHomePageState extends State<MyHomePage> {
   ];
 
   int _selectedIndex = 0;
+  int liveOffset = 1300;
+  var myFrameLevel = 1;
 
   //180   200   200   200   200   200   140
   //1-10 10-20 20-30 30-40 40-50 50-60 60-74
@@ -132,10 +135,49 @@ class _MyHomePageState extends State<MyHomePage> {
     return path;
   }
 
+  Widget sameDayError() {
+    return Scaffold(
+      appBar: AppBar(),
+      backgroundColor: Colors.deepPurple,
+      body: Center(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 200,
+            ),
+            Text(
+              'You\'ve already answered your check-in for today. Come back tomorrow!',
+              textAlign: TextAlign.center,
+              textScaleFactor: 4,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(
+              height: 100,
+            ),
+            IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: SizedBox(
+                  height: 100,
+                  width: 100,
+                  child: new Image.asset(
+                    logo,
+                    color: Colors.white,
+                  ),
+                ))
+          ],
+        ),
+      ),
+    );
+  }
+
   int fromPathToId(String path) {
     int base = 0;
     String midFolder = path.split('/')[2];
-    // print(midFolder);
     switch (midFolder) {
       case '01-10':
         base += 0;
@@ -199,7 +241,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void playLoopedMusic() async {
     instance = await musicCache.loop("music.mp3");
-    // await instance.setVolume(0.5); you can even set the volume
   }
 
   void pauseMusic() {
@@ -231,16 +272,15 @@ class _MyHomePageState extends State<MyHomePage> {
   Future readAccountLevel() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     int index = prefs.getInt('index') ?? 0;
-    print('read account Level: ' + index.toString());
+    // print('read account level: ' + index.toString());
     return index;
   }
 
   Future addAccountLevel() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     int index = prefs.getInt('index') ?? 0;
-    print('read account Level: ' + index.toString());
     prefs..setInt('index', index + 1);
-    print('saved new level as ' + (index + 1).toString());
+    // print('saved new level as ' + (index + 1).toString());
     return index + 1;
   }
 
@@ -252,9 +292,27 @@ class _MyHomePageState extends State<MyHomePage> {
     return fullPaths;
   }
 
+  Future<bool> sameDay() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String date = prefs.getString('date') ?? '';
+    if (date == DateTime.now().toString().substring(0, 10)) {
+      isSameDay = true;
+      print(true);
+      return true;
+    } else {
+      print('false + in memory: ' +
+          date +
+          ' now: ' +
+          DateTime.now().toString().substring(0, 10));
+      isSameDay = false;
+      return false;
+    }
+  }
+
   void initState() {
     super.initState();
     encourage = getEncourage();
+    readAccountLevel();
   }
 
   @override
@@ -294,7 +352,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 "jpg",
                 5,
                 key: Key("offline"),
-                fullPaths: addPaths(1, 1300),
+                fullPaths: addPaths(myFrameLevel, myFrameLevel + liveOffset),
+                isBoomerang: true,
               ),
               Container(
                 height: 20,
@@ -402,12 +461,20 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.blueGrey,
-        onTap: (index) {
+        onTap: (index) async {
           _selectedIndex = index;
           if (_selectedIndex == 1) {
-            Navigator.push(context,
-                new MaterialPageRoute(builder: (ctxt) => new Questions()));
-            // .then((value) => print('value'));
+            if (isSameDay) {
+              print('faogn');
+            } else {
+              final result = await Navigator.push(context,
+                  new MaterialPageRoute(builder: (ctxt) => new Questions()));
+              if (result == true) {
+                // addAccountLevel();
+                // readAccountLevel();
+                grow();
+              }
+            }
           }
           if (_selectedIndex == 2) {
             Navigator.push(context,
@@ -416,5 +483,14 @@ class _MyHomePageState extends State<MyHomePage> {
         },
       ),
     );
+  }
+
+  void grow() {
+    print('grow');
+    // setState(() {
+    //   if (myFrameLevel < 1300) {
+    //     myFrameLevel += liveOffset;
+    //   }
+    // });
   }
 }
