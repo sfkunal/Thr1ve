@@ -1,7 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:image_sequence_animator/image_sequence_animator.dart';
 import 'package:intl/intl.dart';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import './questions.dart';
@@ -50,7 +49,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   Questions questionPage = new Questions();
-  final bool enableAudio = false;
+  final bool enableAudio = true;
   //remember to change to true
   bool audio = true;
   final double imageScale = 1.5;
@@ -199,7 +198,7 @@ class _MyHomePageState extends State<MyHomePage> {
   AudioCache musicCache = AudioCache(prefix: "audio/");
 
   void playLoopedMusic() async {
-    instance = await musicCache.loop("natureaudio.mp3");
+    instance = await musicCache.loop("music.mp3");
     // await instance.setVolume(0.5); you can even set the volume
   }
 
@@ -346,8 +345,8 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
         Positioned(
-            top: 470.0,
-            left: 0.0,
+            top: 460.0,
+            right: 0.0,
             child: Column(
               children: [
                 IconButton(

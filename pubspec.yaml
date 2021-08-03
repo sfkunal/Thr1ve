@@ -51,7 +51,7 @@ dev_dependencies:
 # The following section is specific to Flutter.
 flutter:
   assets: 
-    - audio/natureaudio.mp3
+    - audio/music.mp3
     - images/
     - images/tree/01-10/
     - images/tree/10-20/

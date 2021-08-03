@@ -236,18 +236,6 @@ class QuestionsState extends State<Questions> {
     return n;
   }
 
-  void setQuestionMap(Map<String, List<String>> map) {
-    // map.forEach((category, question) {
-    //   if (questionMap.containsKey(category)) {
-    //     questionMap[category]!.add(question);
-    //   } else {
-    //     questionMap[category] = [];
-    //     questionMap[category]!.add(question);
-    //   }
-    // });
-    questionMap = map;
-  }
-
   String logo = 'images/logo.png';
 
   void initState() {

@@ -57,7 +57,10 @@ class _TipsState extends State<Tips> {
     }
   }
 
-  Widget quoteTip(String quote, String author) {
+  Widget quoteTip() {
+    String quote =
+        '“Winning is not a sometime thing; it’s an all time thing. You don’t win once in a while, you don’t do things right once in a while, you do them right all the time. Winning is habit. Unfortunately, so is losing.”';
+    String author = 'Vince Lombardi';
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -114,7 +117,7 @@ class _TipsState extends State<Tips> {
             initialVideoId: YoutubePlayer.convertUrlToId(currUrl).toString(),
             flags: YoutubePlayerFlags(
               autoPlay: true,
-              mute: true,
+              mute: false,
               loop: true,
             ),
           ),
@@ -135,6 +138,14 @@ class _TipsState extends State<Tips> {
         ),
       ],
     );
+  }
+
+  bool onQuote = true;
+  late Widget animateQuoteVid;
+
+  void initState() {
+    super.initState();
+    animateQuoteVid = quoteTip();
   }
 
   @override
@@ -158,9 +169,26 @@ class _TipsState extends State<Tips> {
               style: TextStyle(color: Colors.white),
             ),
             SizedBox(
-              height: 50,
+              height: 20,
             ),
-            videoTip(),
+            IconButton(
+                onPressed: () {
+                  setState(() {
+                    onQuote = !onQuote;
+                    if (onQuote == true) {
+                      animateQuoteVid = quoteTip();
+                    }
+                    if (onQuote == false) {
+                      animateQuoteVid = videoTip();
+                    }
+                  });
+                },
+                icon: Icon(Icons.swap_horizontal_circle_outlined)),
+            AnimatedSwitcher(
+              duration: const Duration(seconds: 1),
+              child: animateQuoteVid,
+            ),
+            // videoTip(),
             // quoteTip(
             //     '“Winning is not a sometime thing; it’s an all time thing. You don’t win once in a while, you don’t do things right once in a while, you do them right all the time. Winning is habit. Unfortunately, so is losing.”',
             //     'Vince Lombardi'),
