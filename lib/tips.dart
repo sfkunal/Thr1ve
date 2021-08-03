@@ -196,7 +196,9 @@ class _TipsState extends State<Tips> {
                 height: 30,
               ),
               Text(
-                'I sense your ' + weakestCategory + ' could use some work!',
+                'I sense your ' +
+                    weakestCategory.toLowerCase() +
+                    ' could use some work!',
                 textScaleFactor: 3,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white),

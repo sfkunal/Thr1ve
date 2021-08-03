@@ -7,6 +7,7 @@ import './questions.dart';
 import './statistics.dart';
 import './help.dart';
 import 'datasets.dart';
+import 'sameDay.dart';
 import 'tips.dart';
 import 'package:flutter/services.dart';
 
@@ -48,8 +49,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final bool cheatMode = true;
+
   Questions questionPage = new Questions();
-  final bool enableAudio = true;
+  final bool enableAudio = false;
   bool isSameDay = false;
   //remember to change to true
   bool audio = true;
@@ -292,20 +295,17 @@ class _MyHomePageState extends State<MyHomePage> {
     return fullPaths;
   }
 
-  Future<bool> sameDay() async {
+  checkDay() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String date = prefs.getString('date') ?? '';
-    if (date == DateTime.now().toString().substring(0, 10)) {
+
+    String now = DateTime.now().toString().substring(0, 10);
+    // print(date + ' ' + now);
+    if (now == date) {
+      // print('you\'ve already answered for today');
       isSameDay = true;
-      print(true);
-      return true;
     } else {
-      print('false + in memory: ' +
-          date +
-          ' now: ' +
-          DateTime.now().toString().substring(0, 10));
       isSameDay = false;
-      return false;
     }
   }
 
@@ -317,6 +317,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    checkDay();
+
     return Scaffold(
       backgroundColor: Colors.deepPurple.shade400,
       appBar: AppBar(
@@ -464,15 +466,19 @@ class _MyHomePageState extends State<MyHomePage> {
         onTap: (index) async {
           _selectedIndex = index;
           if (_selectedIndex == 1) {
-            if (isSameDay) {
-              print('faogn');
+            if (isSameDay && cheatMode == false) {
+              Navigator.push(context,
+                  new MaterialPageRoute(builder: (ctxt) => new SameDay()));
             } else {
               final result = await Navigator.push(context,
                   new MaterialPageRoute(builder: (ctxt) => new Questions()));
               if (result == true) {
                 // addAccountLevel();
                 // readAccountLevel();
-                grow();
+                setState(() {
+                  isSameDay = true;
+                  grow();
+                });
               }
             }
           }

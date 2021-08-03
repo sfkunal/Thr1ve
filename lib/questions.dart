@@ -13,7 +13,6 @@ class Questions extends StatefulWidget {
 }
 
 class QuestionsState extends State<Questions> {
-  final bool cheatMode = false;
   List<Node> answers = [];
   String currQuestion = '';
   String currCategory = '';
@@ -238,46 +237,6 @@ class QuestionsState extends State<Questions> {
   }
 
   String logo = 'images/logo.png';
-
-  Widget sameDay() {
-    return Scaffold(
-      appBar: AppBar(),
-      backgroundColor: Colors.deepPurple,
-      body: Center(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 200,
-            ),
-            Text(
-              'You\'ve already answered your check-in for today. Come back tomorrow!',
-              textAlign: TextAlign.center,
-              textScaleFactor: 4,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(
-              height: 100,
-            ),
-            IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: new Image.asset(
-                    logo,
-                    color: Colors.white,
-                  ),
-                ))
-          ],
-        ),
-      ),
-    );
-  }
 
   Widget readyPage() {
     return Scaffold(
@@ -507,7 +466,7 @@ class QuestionsState extends State<Questions> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String today = DateTime.now().toString().substring(0, 10);
     await prefs.setString('date', today);
-    print('saved: ' + today);
+    // print('saved: ' + today);
   }
 
   Future fillQuestions() async {
