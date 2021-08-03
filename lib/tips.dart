@@ -15,7 +15,7 @@ class _TipsState extends State<Tips> {
   String weakestCategory = 'Mindset';
   String logo = 'images/logo.png';
   String id = '2W7POjFb88g';
-  String currUrl = 'https://www.youtube.com/watch?v=2W7POjFb88g';
+  String currUrl = 'https://www.youtube.com/watch?v=yG7v4y_xwzQ';
   String currQuote = '';
 
   void readAvgs() async {

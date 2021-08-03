@@ -1,6 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:image_sequence_animator/image_sequence_animator.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import './questions.dart';
@@ -9,7 +8,7 @@ import './help.dart';
 import 'datasets.dart';
 import 'sameDay.dart';
 import 'tips.dart';
-import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 // to pull:
 // git pull (do this everytime you switch devices)
@@ -50,9 +49,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final bool cheatMode = true;
+  final bool enableAudio = true;
 
   Questions questionPage = new Questions();
-  final bool enableAudio = false;
   bool isSameDay = false;
   //remember to change to true
   bool audio = true;
@@ -247,6 +246,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void pauseMusic() {
+    // ignore: unnecessary_null_comparison
     if (instance != null) {
       instance.pause();
     }
@@ -327,8 +327,13 @@ class _MyHomePageState extends State<MyHomePage> {
               IconButton(
                 icon: Icon(Icons.help_outline),
                 onPressed: () {
+                  if (enableAudio) {
+                    pauseMusic();
+                  }
                   Navigator.push(context,
-                      new MaterialPageRoute(builder: (ctxt) => new Help()));
+                          new MaterialPageRoute(builder: (ctxt) => new Help()))
+                      .then((value) =>
+                          enableAudio ? playLoopedMusic() : print('music off'));
                 },
               ),
             ],
@@ -413,9 +418,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 IconButton(
                     iconSize: 32,
                     onPressed: () {
-                      HapticFeedback.heavyImpact();
-                      Navigator.push(context,
-                          new MaterialPageRoute(builder: (ctxt) => new Tips()));
+                      if (enableAudio) {
+                        pauseMusic();
+                      }
+                      Navigator.push(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (ctxt) => new Tips())).then((value) =>
+                          enableAudio ? playLoopedMusic() : print('music off'));
                     },
                     icon: Icon(
                       Icons.lightbulb_outline_sharp,

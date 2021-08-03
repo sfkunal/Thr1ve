@@ -264,7 +264,7 @@ class _ScoreGraphState extends State<ScoreGraph> {
                             textScaleFactor: 2,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: Colors.purple),
+                                color: Colors.grey),
                           ),
                           SizedBox(
                             width: 10,
@@ -316,7 +316,7 @@ class _ScoreGraphState extends State<ScoreGraph> {
                           weekAvg(performance).toString(),
                           textScaleFactor: 3,
                           style: TextStyle(
-                              color: Colors.purple,
+                              color: Colors.grey,
                               fontWeight: FontWeight.bold,
                               decoration: TextDecoration.underline),
                         ),
@@ -370,7 +370,7 @@ class _ScoreGraphState extends State<ScoreGraph> {
                           getGoal(weekAvg(performance)).toString(),
                           textScaleFactor: 3,
                           style: TextStyle(
-                              color: Colors.purple,
+                              color: Colors.grey,
                               fontWeight: FontWeight.bold,
                               decoration: TextDecoration.underline),
                         ),
@@ -520,7 +520,7 @@ class _ScoreGraphState extends State<ScoreGraph> {
       spots: toList(performance),
       isCurved: true,
       colors: [
-        Colors.purple,
+        Colors.grey,
       ],
       barWidth: 3,
       isStrokeCapRound: true,
