@@ -63,7 +63,7 @@ class Data {
     '"A muscle is like a car. If you want it to run well early in the morning, you have to warm it up." -Florence Griffith Joyner',
     '"People may say I developed an iron will, but what really happened is that I made myself much fitter. I think an iron will is always supported by fitness." -Ivan Lendl',
     '"Facts are to the mind what food is to the body." -Edmund Burke',
-    '"You can heal your body with food." -Stacy Keibler',
+    '"You can heal your body with food." -Stacy Keibler'
   ];
   static List<String> performanceQuotes = [
     '"Swimming is normal for me. I\'m relaxed. I\'m comfortable, and I know my surroundings. It\'s my home." -Michael Phelps',
@@ -88,7 +88,7 @@ class Data {
     '"Only the mediocre are always at their best." -Giraudoux, Jean',
     '"Try not. Do, or do not. There is no try. " -Yoda',
     '"He who never fell never climbed." -Unknown',
-    '"Success is more attitude then aptitude." -Unknown',
+    '"Success is more attitude then aptitude." -Unknown'
   ];
   static List<String> driveQuotes = [
     '"Courage is grace under pressure. " -Hemingway, Ernest',
@@ -271,7 +271,7 @@ class Data {
     '"I became a good pitcher when I stopped trying to make them miss the ball and started trying to make them hit it. " -Sandy Koufax',
     '"I don’t have to wait for nobody, I move when I wanna move. " -Floyd Mayweather',
     '"A good hockey player plays where the puck is. A great hockey player plays where the puck is going to be. " -Wayne Gretzky',
-    '"Most talented players don’t always succeed. Some don’t even make the team. It’s more what’s inside." -Brett Favre',
+    '"Most talented players don’t always succeed. Some don’t even make the team. It’s more what’s inside." -Brett Favre'
   ];
 
   static List<String> mindsetVids = [

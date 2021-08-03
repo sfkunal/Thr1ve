@@ -16,6 +16,7 @@ class _TipsState extends State<Tips> {
   String logo = 'images/logo.png';
   String id = '2W7POjFb88g';
   String currUrl = 'https://www.youtube.com/watch?v=2W7POjFb88g';
+  String currQuote = '';
 
   void readAvgs() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -57,10 +58,21 @@ class _TipsState extends State<Tips> {
     }
   }
 
+  Widget getLogo() {
+    return Column(
+      children: [
+        SizedBox(
+          height: 30,
+        ),
+        Image.asset(
+          logo,
+          scale: .5,
+        ),
+      ],
+    );
+  }
+
   Widget quoteTip() {
-    String quote =
-        '“Winning is not a sometime thing; it’s an all time thing. You don’t win once in a while, you don’t do things right once in a while, you do them right all the time. Winning is habit. Unfortunately, so is losing.”';
-    String author = 'Vince Lombardi';
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -70,18 +82,7 @@ class _TipsState extends State<Tips> {
             child: Column(
               children: [
                 Text(
-                  quote,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 32,
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  "-" + author,
+                  currQuote,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,
@@ -92,7 +93,7 @@ class _TipsState extends State<Tips> {
             ),
           ),
           SizedBox(
-            height: 50,
+            height: 10,
           ),
           Image.asset(
             logo,
@@ -105,9 +106,6 @@ class _TipsState extends State<Tips> {
   Widget videoTip() {
     return Column(
       children: [
-        SizedBox(
-          height: 20,
-        ),
         Container(
           height: 20,
           color: Colors.deepPurple.shade500,
@@ -131,70 +129,178 @@ class _TipsState extends State<Tips> {
           height: 20,
           color: Colors.deepPurple.shade500,
         ),
-        SizedBox(height: 35),
+        SizedBox(
+          height: 10,
+        ),
         Image.asset(
           logo,
-          scale: 1,
-        ),
+        )
       ],
     );
   }
 
-  bool onQuote = true;
   late Widget animateQuoteVid;
+
+  getQuote() {
+    switch (weakestCategory) {
+      case 'Mindset':
+        final random = new Random();
+        var i = random.nextInt(Data.mindsetQuotes.length);
+        setState(() {
+          currQuote = Data.mindsetQuotes[i];
+        });
+        break;
+      case 'Energy':
+        final random = new Random();
+        var i = random.nextInt(Data.energyQuotes.length);
+        setState(() {
+          currQuote = Data.energyQuotes[i];
+        });
+        break;
+      case 'Performance':
+        final random = new Random();
+        var i = random.nextInt(Data.performanceQuotes.length);
+        setState(() {
+          currQuote = Data.performanceQuotes[i];
+        });
+        break;
+      case 'Drive':
+        final random = new Random();
+        var i = random.nextInt(Data.driveQuotes.length);
+        setState(() {
+          currQuote = Data.driveQuotes[i];
+        });
+        break;
+    }
+  }
 
   void initState() {
     super.initState();
-    animateQuoteVid = quoteTip();
+    animateQuoteVid = getLogo();
+    readAvgs();
+    getQuote();
   }
 
   @override
   Widget build(BuildContext context) {
-    readAvgs();
     return Scaffold(
       backgroundColor: Colors.deepPurple.shade400,
       appBar: AppBar(
         title: Text(''),
       ),
-      body: Center(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 30,
-            ),
-            Text(
-              'Thr1ve senses your ' + weakestCategory + ' could use some work!',
-              textScaleFactor: 3,
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            IconButton(
-                onPressed: () {
-                  setState(() {
-                    onQuote = !onQuote;
-                    if (onQuote == true) {
-                      animateQuoteVid = quoteTip();
-                    }
-                    if (onQuote == false) {
-                      animateQuoteVid = videoTip();
-                    }
-                  });
-                },
-                icon: Icon(Icons.swap_horizontal_circle_outlined)),
-            AnimatedSwitcher(
-              duration: const Duration(seconds: 1),
-              child: animateQuoteVid,
-            ),
-            // videoTip(),
-            // quoteTip(
-            //     '“Winning is not a sometime thing; it’s an all time thing. You don’t win once in a while, you don’t do things right once in a while, you do them right all the time. Winning is habit. Unfortunately, so is losing.”',
-            //     'Vince Lombardi'),
-          ],
+      body: Stack(children: [
+        Center(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 30,
+              ),
+              Text(
+                'Thr1ve senses your ' +
+                    weakestCategory +
+                    ' could use some work!',
+                textScaleFactor: 3,
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              AnimatedSwitcher(
+                duration: const Duration(seconds: 1),
+                child: animateQuoteVid,
+              ),
+            ],
+          ),
         ),
-      ),
+        Column(children: [
+          SizedBox(
+            height: 560,
+          ),
+          Container(
+            color: Colors.black,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Stack(
+                        children: <Widget>[
+                          Positioned.fill(
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: <Color>[
+                                    Colors.deepPurple,
+                                    Colors.purple
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              padding: const EdgeInsets.all(16.0),
+                              primary: Colors.white,
+                              textStyle: TextStyle(fontSize: 20),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                animateQuoteVid = quoteTip();
+                              });
+                            },
+                            child: Text('Quote'),
+                          ),
+                        ],
+                      ),
+                    ),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Stack(
+                        children: <Widget>[
+                          Positioned.fill(
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: <Color>[
+                                    Colors.deepPurple,
+                                    Colors.purple
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              padding: const EdgeInsets.all(16.0),
+                              primary: Colors.white,
+                              textStyle: const TextStyle(fontSize: 20),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                animateQuoteVid = videoTip();
+                              });
+                            },
+                            child: Text('Video'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 24,
+                )
+              ],
+            ),
+          ),
+        ])
+      ]),
     );
   }
 }

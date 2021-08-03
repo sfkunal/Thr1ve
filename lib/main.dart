@@ -49,7 +49,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   Questions questionPage = new Questions();
-  final bool enableAudio = true;
+  final bool enableAudio = false;
   //remember to change to true
   bool audio = true;
   final double imageScale = 1.5;
