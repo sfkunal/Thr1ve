@@ -55,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
   //
   //
   //
-  final bool cheatMode = true;
+  final bool cheatMode = false;
   final bool enableAudio = true;
   //
   //
