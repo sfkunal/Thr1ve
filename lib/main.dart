@@ -323,6 +323,9 @@ class _MyHomePageState extends State<MyHomePage> {
               fontWeight: FontWeight.bold,
               color: Colors.black),
         ),
+        SizedBox(
+          height: 5,
+        ),
         Container(
           height: 20,
           color: Colors.black,
