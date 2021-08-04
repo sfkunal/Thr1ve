@@ -28,7 +28,7 @@ class _HelpState extends State<Help> {
               aspectRatio: 9 / 9,
               controller: YoutubePlayerController(
                 initialVideoId: YoutubePlayer.convertUrlToId(
-                        'https://www.youtube.com/watch?v=Ah0Ys50CqO8')
+                        'https://www.youtube.com/watch?v=XXZmCxMPvVY')
                     .toString(),
                 flags: YoutubePlayerFlags(
                   autoPlay: true,
