@@ -1,4 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter_application_1/comingsoon.dart';
 import 'package:image_sequence_animator/image_sequence_animator.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -382,6 +383,35 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  Widget getFutureButton() {
+    return Column(
+      children: [
+        IconButton(
+          icon: Icon(
+            Icons.watch_later_sharp,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            if (audio) {
+              pauseMusic();
+            }
+            Navigator.push(context,
+                    new MaterialPageRoute(builder: (ctxt) => new ComingSoon()))
+                .then(
+                    (value) => audio && enableAudio ? playLoopedMusic() : null);
+          },
+        ),
+        Text(
+          'coming soon',
+          style: TextStyle(color: Colors.white),
+        ),
+        SizedBox(
+          height: 2,
+        )
+      ],
+    );
+  }
+
   bool audio = true;
   AudioPlayer player = new AudioPlayer();
   AudioCache cache = AudioCache(prefix: "audio/");
@@ -481,6 +511,11 @@ class _MyHomePageState extends State<MyHomePage> {
             left: 0,
             bottom: 0,
             child: getTipsButton(),
+          ),
+          Positioned(
+            bottom: 0,
+            right: 5,
+            child: getFutureButton(),
           )
         ],
       ),

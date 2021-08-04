@@ -36,7 +36,6 @@ dependencies:
   youtube_player_flutter: ^8.0.0
   audioplayers: ^0.19.1
   image_sequence_animator: ^2.0.0
-  vibration: ^1.7.3
   intl: ^0.17.0
 
 dev_dependencies:
