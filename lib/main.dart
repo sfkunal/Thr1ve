@@ -55,8 +55,8 @@ class _MyHomePageState extends State<MyHomePage> {
   //
   //
   //
-  final bool cheatMode = false;
-  final bool enableAudio = true;
+  bool cheatMode = false;
+  final bool enableAudio = false;
   //
   //
   //
@@ -454,6 +454,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int liveOffset = 10;
   int myFrameLevel = 20;
 
+  int numPressed = 0;
   @override
   Widget build(BuildContext context) {
     checkDay();
@@ -516,57 +517,85 @@ class _MyHomePageState extends State<MyHomePage> {
             bottom: 0,
             right: 5,
             child: getFutureButton(),
+          ),
+          Positioned(
+            top: 0,
+            left: 0,
+            child: IconButton(
+              icon: Icon(
+                Icons.access_alarm,
+                color: Colors.deepPurple.shade400,
+              ),
+              onPressed: () {
+                if (numPressed == 3) {
+                  setState(() {
+                    cheatMode = !cheatMode;
+                    print('cheat mode: ' + cheatMode.toString());
+                  });
+                  numPressed = 0;
+                } else {
+                  numPressed++;
+                }
+              },
+            ),
           )
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        showSelectedLabels: true,
-        showUnselectedLabels: true,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
+      bottomNavigationBar: Theme(
+        data: ThemeData(canvasColor: Colors.deepPurple),
+        child: BottomNavigationBar(
+          showSelectedLabels: true,
+          showUnselectedLabels: true,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.home,
+                color: Colors.white,
+              ),
+              label: 'home',
             ),
-            label: 'home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.sticky_note_2_outlined,
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.sticky_note_2_outlined,
+                color: Colors.white,
+              ),
+              label: 'check-in',
             ),
-            label: 'check-in',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.assessment_outlined,
+            BottomNavigationBarItem(
+              backgroundColor: Colors.white,
+              icon: Icon(
+                Icons.assessment_outlined,
+                color: Colors.white,
+              ),
+              label: 'results',
             ),
-            label: 'results',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blueGrey,
-        onTap: (index) async {
-          _selectedIndex = index;
-          if (_selectedIndex == 1) {
-            if (isSameDay && cheatMode == false) {
-              Navigator.push(context,
-                  new MaterialPageRoute(builder: (ctxt) => new SameDay()));
-            } else {
-              final result = await Navigator.push(context,
-                  new MaterialPageRoute(builder: (ctxt) => new Questions()));
-              if (result == true) {
-                setState(() {
-                  isSameDay = true;
-                  accountLevel = accountLevel + 1;
-                  myFrameLevel = accountLevel * 5;
-                });
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.blueGrey,
+          onTap: (index) async {
+            _selectedIndex = index;
+            if (_selectedIndex == 1) {
+              if (isSameDay && cheatMode == false) {
+                Navigator.push(context,
+                    new MaterialPageRoute(builder: (ctxt) => new SameDay()));
+              } else {
+                final result = await Navigator.push(context,
+                    new MaterialPageRoute(builder: (ctxt) => new Questions()));
+                if (result == true) {
+                  setState(() {
+                    isSameDay = true;
+                    accountLevel = accountLevel + 1;
+                    myFrameLevel = accountLevel * 5;
+                  });
+                }
               }
             }
-          }
-          if (_selectedIndex == 2) {
-            Navigator.push(context,
-                new MaterialPageRoute(builder: (ctxt) => new Statistics()));
-          }
-        },
+            if (_selectedIndex == 2) {
+              Navigator.push(context,
+                  new MaterialPageRoute(builder: (ctxt) => new Statistics()));
+            }
+          },
+        ),
       ),
     );
   }

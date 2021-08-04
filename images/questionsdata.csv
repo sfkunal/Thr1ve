@@ -7,8 +7,6 @@ Drive,How much was today’s practice a building block for your longer term goal
 Drive,How motivated were you today to work hard?
 Drive,How resilient were you today with things that didn’t go your way?
 Drive,How inspired were you today during practice?
-Drive,How do I want to feel today?
-Drive,How supported do you feel today?
 Drive,How frequently do you engage in fun activities?
 Drive,How frequently do you talk or meet up with friends?
 Drive,How engaged do you feel when competing?
@@ -44,8 +42,6 @@ Mindset,How focused where you during practice?
 Mindset,How much did you incorporate what you’ve been working on recently during practice?
 Mindset,How engaged were you during practice?
 Mindset,How much were you thinking of things outside of practice?
-Mindset,How well do you think you will handle distractions today?
-Mindset,How confident do you feel today?
 Mindset,How much did you have the mental edge over your opponent?
 Mindset,How well did you utilize pre-game rituals?
 Mindset,How well did you stay calm during adversity?
@@ -62,7 +58,6 @@ Mindset,How much do you feel you learn from disappointing results?
 Mindset,How easily do you get distracted by your own thoughts?
 Mindset,How often do you worry about making “silly” mistakes?
 Mindset,How focused are you during games?
-Mindset,How easily do you get distracted while competing?
 Mindset,How did you handle constructive feedback during your practice?
 Performance,How well did you compete today?
 Performance,How well did you compete compared to your last 2 days?
@@ -72,8 +67,6 @@ Performance,How well did your physical strength support your perfrormance today?
 Performance,How well did your mindset support your performance today?
 Performance,How satisfied where you with your overall performance today?
 Performance,How much do you think there was room for improvement today?
-Performance,How well do you think you will compete today?
-Performance,How much do you feel like your training is heading in the right direction?
 Performance,How much do you focus on results and outcomes?
 Performance,How satisfied are you with your performance the last two weeks?
 Performance,How well did you execute your strategy for the game?
@@ -102,10 +95,7 @@ Energy,How well did you hydrate before practice?
 Energy,How well did you hydrate during practice?
 Energy,How well did you take advantage of short breaks to rest?
 Energy,How relaxed did you feel before practice?
-Energy,How motivated do you feel today?
-Energy,How energized do you feel today?
 Energy,How much do you feel like you are ready to take on the world?
-Energy,How rested do you feel today?
 Energy,How would you rate the quality of your sleep?
 Energy,How often do you feel tired?
 Energy,How satisfied are you with your current weight?
