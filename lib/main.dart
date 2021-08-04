@@ -48,16 +48,24 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  //
+  //
+  //
+  //
+  //
+  //
   final bool cheatMode = true;
   final bool enableAudio = true;
+  //
+  //
+  //
+  //
+  //
+  int accountLevel = 1;
 
   Questions questionPage = new Questions();
   bool isSameDay = false;
   //remember to change to true
-  bool audio = true;
-  final double imageScale = 1.5;
-  final int startLevel = 56;
-  final int endLevel = 1300;
   String logo = 'images/logo.png';
   String encourage = '';
   List<String> encourageList = [
@@ -66,10 +74,6 @@ class _MyHomePageState extends State<MyHomePage> {
     'Stack those leaves!',
     'You\'re on fire!',
   ];
-
-  int _selectedIndex = 0;
-  int liveOffset = 1300;
-  var myFrameLevel = 1;
 
   //180   200   200   200   200   200   140
   //1-10 10-20 20-30 30-40 40-50 50-60 60-74
@@ -238,44 +242,13 @@ class _MyHomePageState extends State<MyHomePage> {
     return date[2];
   }
 
-  AudioPlayer instance = new AudioPlayer();
-  AudioCache musicCache = AudioCache(prefix: "audio/");
-
-  void playLoopedMusic() async {
-    instance = await musicCache.loop("music.mp3");
-  }
-
-  void pauseMusic() {
-    // ignore: unnecessary_null_comparison
-    if (instance != null) {
-      instance.pause();
-    }
-  }
-
-  Icon displayVol() {
-    if (audio == true) {
-      if (enableAudio) {
-        playLoopedMusic();
-      }
-      return Icon(
-        Icons.volume_up,
-        color: Colors.white,
-      );
-    } else {
-      if (enableAudio) {
-        instance.pause();
-      }
-      return Icon(
-        Icons.volume_off,
-        color: Colors.white,
-      );
-    }
-  }
-
   Future readAccountLevel() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     int index = prefs.getInt('index') ?? 0;
-    // print('read account level: ' + index.toString());
+    setState(() {
+      accountLevel = index;
+      myFrameLevel = accountLevel * 5;
+    });
     return index;
   }
 
@@ -283,7 +256,9 @@ class _MyHomePageState extends State<MyHomePage> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     int index = prefs.getInt('index') ?? 0;
     prefs..setInt('index', index + 1);
-    // print('saved new level as ' + (index + 1).toString());
+    setState(() {
+      accountLevel = index + 1;
+    });
     return index + 1;
   }
 
@@ -300,12 +275,133 @@ class _MyHomePageState extends State<MyHomePage> {
     String date = prefs.getString('date') ?? '';
 
     String now = DateTime.now().toString().substring(0, 10);
-    // print(date + ' ' + now);
     if (now == date) {
-      // print('you\'ve already answered for today');
       isSameDay = true;
     } else {
       isSameDay = false;
+    }
+  }
+
+  Widget getTipsButton() {
+    return Column(
+      children: [
+        IconButton(
+            iconSize: 32,
+            onPressed: () {
+              if (audio) {
+                pauseMusic();
+              }
+              Navigator.push(context,
+                      new MaterialPageRoute(builder: (ctxt) => new Tips()))
+                  .then((value) =>
+                      audio && enableAudio ? playLoopedMusic() : null);
+            },
+            icon: Icon(
+              Icons.lightbulb_outline_sharp,
+              color: Colors.white,
+            )),
+        Text(
+          'tips',
+          style: TextStyle(color: Colors.white),
+        ),
+        SizedBox(
+          height: 3,
+        ),
+      ],
+    );
+  }
+
+  Widget getTree() {
+    return Column(
+      children: [
+        Text(
+          'Tree Level $accountLevel',
+          textScaleFactor: 1.6,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              decorationStyle: TextDecorationStyle.solid,
+              fontWeight: FontWeight.bold,
+              color: Colors.black),
+        ),
+        Container(
+          height: 20,
+          color: Colors.black,
+        ),
+        ImageSequenceAnimator(
+          "assets/ImageSequence",
+          "Frame_",
+          0,
+          5,
+          "jpg",
+          liveOffset.toDouble(),
+          fps: 20,
+          key: Key("offline"),
+          fullPaths: fullPaths.sublist(myFrameLevel, myFrameLevel + liveOffset),
+          isBoomerang: true,
+        ),
+        Container(
+          height: 20,
+          color: Colors.black,
+        ),
+      ],
+    );
+  }
+
+  Widget getDate() {
+    return Column(
+      children: [
+        Text(
+          getToday(),
+          textScaleFactor: 3.9,
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        Text(
+          getYear(),
+          textScaleFactor: 3.6,
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        )
+      ],
+    );
+  }
+
+  Widget getEncouragement() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        encourage,
+        textScaleFactor: 3.4,
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
+  bool audio = true;
+  AudioPlayer player = new AudioPlayer();
+  AudioCache cache = AudioCache(prefix: "audio/");
+
+  void playLoopedMusic() async {
+    player = await cache.loop("music.mp3");
+  }
+
+  void pauseMusic() {
+    player.stop();
+  }
+
+  Icon displayVol() {
+    if (audio) {
+      return Icon(
+        Icons.volume_up,
+        color: Colors.white,
+      );
+    } else {
+      return Icon(
+        Icons.volume_off,
+        color: Colors.white,
+      );
     }
   }
 
@@ -313,12 +409,21 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     encourage = getEncourage();
     readAccountLevel();
+    addPaths(1, 1300);
+    playLoopedMusic();
+    setState(() {
+      liveOffset = myFrameLevel;
+      myFrameLevel = 0;
+    });
   }
+
+  int _selectedIndex = 0;
+  int liveOffset = 10;
+  int myFrameLevel = 20;
 
   @override
   Widget build(BuildContext context) {
     checkDay();
-
     return Scaffold(
       backgroundColor: Colors.deepPurple.shade400,
       appBar: AppBar(
@@ -327,13 +432,13 @@ class _MyHomePageState extends State<MyHomePage> {
               IconButton(
                 icon: Icon(Icons.help_outline),
                 onPressed: () {
-                  if (enableAudio) {
+                  if (audio) {
                     pauseMusic();
                   }
                   Navigator.push(context,
                           new MaterialPageRoute(builder: (ctxt) => new Help()))
                       .then((value) =>
-                          enableAudio ? playLoopedMusic() : print('music off'));
+                          audio && enableAudio ? playLoopedMusic() : null);
                 },
               ),
             ],
@@ -342,112 +447,40 @@ class _MyHomePageState extends State<MyHomePage> {
             logo,
             scale: 3.2,
           )),
-      body: Stack(children: [
-        Center(
-          child: Column(
+      body: Stack(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              SizedBox(height: 180),
-              Container(
-                height: 20,
-                color: Colors.black,
-              ),
-              ImageSequenceAnimator(
-                "assets/ImageSequence",
-                "Frame_",
-                0,
-                5,
-                "jpg",
-                5,
-                key: Key("offline"),
-                fullPaths: addPaths(myFrameLevel, myFrameLevel + liveOffset),
-                isBoomerang: true,
-              ),
-              Container(
-                height: 20,
-                color: Colors.black,
-              ),
-              SizedBox(height: 15),
+              getEncouragement(),
+              getTree(),
+              getDate(),
             ],
           ),
-        ),
-        Center(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 470,
-              ),
-              Text(
-                getToday(),
-                textScaleFactor: 3.9,
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-              Text(
-                getYear(),
-                textScaleFactor: 3.6,
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              )
-            ],
-          ),
-        ),
-        Center(
-          child: Column(
-            children: [
-              SizedBox(height: 45),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  encourage,
-                  textScaleFactor: 3.4,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              )
-            ],
-          ),
-        ),
-        Positioned(
-            top: 460.0,
-            right: 0.0,
-            child: Column(
-              children: [
-                IconButton(
-                    iconSize: 32,
-                    onPressed: () {
-                      if (enableAudio) {
-                        pauseMusic();
-                      }
-                      Navigator.push(
-                          context,
-                          new MaterialPageRoute(
-                              builder: (ctxt) => new Tips())).then((value) =>
-                          enableAudio ? playLoopedMusic() : print('music off'));
-                    },
-                    icon: Icon(
-                      Icons.lightbulb_outline_sharp,
-                      color: Colors.white,
-                    )),
-                Text(
-                  'tips',
-                  style: TextStyle(color: Colors.white),
-                )
-              ],
-            )),
-        Positioned(
+          Positioned(
             right: 0,
             child: IconButton(
               icon: displayVol(),
               onPressed: () {
                 setState(() {
                   audio = !audio;
+                  if (!audio) {
+                    pauseMusic();
+                  } else {
+                    playLoopedMusic();
+                  }
                 });
               },
-            )),
-      ]),
+            ),
+          ),
+          Positioned(
+            left: 0,
+            bottom: 0,
+            child: getTipsButton(),
+          )
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: true,
         showUnselectedLabels: true,
@@ -483,11 +516,10 @@ class _MyHomePageState extends State<MyHomePage> {
               final result = await Navigator.push(context,
                   new MaterialPageRoute(builder: (ctxt) => new Questions()));
               if (result == true) {
-                // addAccountLevel();
-                // readAccountLevel();
                 setState(() {
                   isSameDay = true;
-                  grow();
+                  accountLevel = accountLevel + 1;
+                  myFrameLevel = accountLevel * 5;
                 });
               }
             }
@@ -499,14 +531,5 @@ class _MyHomePageState extends State<MyHomePage> {
         },
       ),
     );
-  }
-
-  void grow() {
-    print('grow');
-    // setState(() {
-    //   if (myFrameLevel < 1300) {
-    //     myFrameLevel += liveOffset;
-    //   }
-    // });
   }
 }

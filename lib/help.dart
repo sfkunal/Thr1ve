@@ -15,35 +15,38 @@ class _HelpState extends State<Help> {
 
   Widget videoTip() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Container(
-          height: 30,
-          color: Colors.deepPurple.shade500,
-        ),
-        YoutubePlayer(
-          aspectRatio: 9 / 9,
-          controller: YoutubePlayerController(
-            initialVideoId: YoutubePlayer.convertUrlToId(
-                    'https://www.youtube.com/watch?v=Ah0Ys50CqO8')
-                .toString(),
-            flags: YoutubePlayerFlags(
-              autoPlay: true,
-              mute: false,
-              loop: true,
+        Column(
+          children: [
+            // Container(
+            //   height: 30,
+            //   color: Colors.deepPurple.shade500,
+            // ),
+            YoutubePlayer(
+              aspectRatio: 9 / 9,
+              controller: YoutubePlayerController(
+                initialVideoId: YoutubePlayer.convertUrlToId(
+                        'https://www.youtube.com/watch?v=Ah0Ys50CqO8')
+                    .toString(),
+                flags: YoutubePlayerFlags(
+                  autoPlay: true,
+                  mute: false,
+                  loop: true,
+                ),
+              ),
+              showVideoProgressIndicator: true,
+              progressIndicatorColor: Colors.amber,
+              bottomActions: [
+                ProgressBar(isExpanded: true),
+              ],
             ),
-          ),
-          showVideoProgressIndicator: true,
-          progressIndicatorColor: Colors.amber,
-          bottomActions: [
-            ProgressBar(isExpanded: true),
+            Container(
+              height: 30,
+              color: Colors.deepPurple.shade500,
+            ),
           ],
-        ),
-        Container(
-          height: 30,
-          color: Colors.deepPurple.shade500,
-        ),
-        SizedBox(
-          height: 10,
         ),
         Image.asset(
           logo,
@@ -59,14 +62,7 @@ class _HelpState extends State<Help> {
       appBar: AppBar(
         title: Text('Tutorial'),
       ),
-      body: Center(
-        child: Column(
-          children: [
-            SizedBox(height: 100),
-            videoTip(),
-          ],
-        ),
-      ),
+      body: videoTip(),
     );
   }
 }

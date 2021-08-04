@@ -73,15 +73,17 @@ class _TipsState extends State<Tips> {
   }
 
   Widget quoteTip() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          Container(
-            color: Colors.deepPurple.shade500,
-            child: Column(
-              children: [
-                Text(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Container(
+          color: Colors.deepPurple.shade500,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
                   currQuote,
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -89,17 +91,14 @@ class _TipsState extends State<Tips> {
                     fontSize: 32,
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          SizedBox(
-            height: 10,
-          ),
-          Image.asset(
-            logo,
-          )
-        ],
-      ),
+        ),
+        Image.asset(
+          logo,
+        )
+      ],
     );
   }
 
@@ -188,115 +187,87 @@ class _TipsState extends State<Tips> {
       appBar: AppBar(
         title: Text(''),
       ),
-      body: Stack(children: [
-        Center(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 30,
-              ),
-              Text(
-                'I sense your ' +
-                    weakestCategory.toLowerCase() +
-                    ' could use some work!',
-                textScaleFactor: 3,
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              AnimatedSwitcher(
-                duration: const Duration(seconds: 1),
-                child: animateQuoteVid,
-              ),
-            ],
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Text(
+            'I sense your ' +
+                weakestCategory.toLowerCase() +
+                ' could use some work!',
+            textScaleFactor: 3,
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white),
           ),
-        ),
-        Container(
-          child: Column(
+          AnimatedSwitcher(
+            duration: const Duration(seconds: 1),
+            child: animateQuoteVid,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Expanded(
-                child: Container(),
-              ),
-              // this will be you container
-              Container(
-                height: 150,
-                color: Colors.black,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Stack(
-                        children: <Widget>[
-                          Positioned.fill(
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: <Color>[
-                                    Colors.deepPurple,
-                                    Colors.purple
-                                  ],
-                                ),
-                              ),
-                            ),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Stack(
+                  children: <Widget>[
+                    Positioned.fill(
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: <Color>[Colors.deepPurple, Colors.purple],
                           ),
-                          TextButton(
-                            style: TextButton.styleFrom(
-                              padding: const EdgeInsets.all(16.0),
-                              primary: Colors.white,
-                              textStyle: TextStyle(fontSize: 20),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                animateQuoteVid = quoteTip();
-                              });
-                            },
-                            child: Text('Quote'),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Stack(
-                        children: <Widget>[
-                          Positioned.fill(
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: <Color>[
-                                    Colors.deepPurple,
-                                    Colors.purple
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          TextButton(
-                            style: TextButton.styleFrom(
-                              padding: const EdgeInsets.all(16.0),
-                              primary: Colors.white,
-                              textStyle: const TextStyle(fontSize: 20),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                animateQuoteVid = videoTip();
-                              });
-                            },
-                            child: Text('Video'),
-                          ),
-                        ],
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.all(16.0),
+                        primary: Colors.white,
+                        textStyle: TextStyle(fontSize: 20),
                       ),
+                      onPressed: () {
+                        setState(() {
+                          animateQuoteVid = quoteTip();
+                        });
+                      },
+                      child: Text('Quote'),
                     ),
                   ],
                 ),
-              )
+              ),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Stack(
+                  children: <Widget>[
+                    Positioned.fill(
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: <Color>[Colors.deepPurple, Colors.purple],
+                          ),
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.all(16.0),
+                        primary: Colors.white,
+                        textStyle: const TextStyle(fontSize: 20),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          animateQuoteVid = videoTip();
+                        });
+                      },
+                      child: Text('Video'),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
-        ),
-      ]),
+        ],
+      ),
     );
   }
 }

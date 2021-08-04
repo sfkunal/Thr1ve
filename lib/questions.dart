@@ -301,108 +301,96 @@ class QuestionsState extends State<Questions> {
             scale: 3.2,
           ),
         ),
-        body: Column(children: [
-          Question(currQuestion),
-          Column(
-            children: [
-              Container(
-                padding: EdgeInsets.only(
-                  left: 0,
-                  right: 0,
-                  top: 10,
-                  bottom: 0,
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        terrible,
-                        sad,
-                        neutral,
-                        happy,
-                        great,
-                      ],
-                    ),
-                    SizedBox(
-                      height: 40,
-                    ),
-                    Text(
-                      rating.toInt().toString(),
-                      textScaleFactor: 5,
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Container(
-                      child: Text(
-                        encourage,
-                        textScaleFactor: 3,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    SizedBox(
-                      width: 370,
-                      height: 100,
-                      child: CupertinoSlider(
-                        value: rating,
-                        onChanged: (newRating) {
-                          imageUpdate(newRating);
-                          setState(() => rating = newRating);
-                          encourageText('neutral');
-                          if (rating >= 0) {
-                            setState(() {
-                              encourageText('terrible');
-                            });
-                          }
-                          if (rating > 2) {
-                            setState(() {
-                              encourageText('sad');
-                            });
-                          }
-                          if (rating > 4) {
-                            setState(() {
-                              encourageText('neutral');
-                            });
-                          }
-                          if (rating > 6) {
-                            setState(() {
-                              encourageText('happy');
-                            });
-                          }
-                          if (rating > 8) {
-                            setState(() {
-                              encourageText('great');
-                            });
-                          }
-                        },
-                        min: 0,
-                        max: 10,
-                        divisions: 10,
-                        thumbColor: Colors.black,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+        body: Column(
+          children: [
+            Question(currQuestion),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  getProgressIcon(1),
-                  getProgressIcon(2),
-                  getProgressIcon(3),
-                  getProgressIcon(4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      terrible,
+                      sad,
+                      neutral,
+                      happy,
+                      great,
+                    ],
+                  ),
+                  // SizedBox(
+                  //   height: 20,
+                  // ),
+                  Text(
+                    rating.toInt().toString(),
+                    textScaleFactor: 5,
+                    textAlign: TextAlign.center,
+                  ),
+                  // SizedBox(
+                  //   height: 10,
+                  // ),
+                  Container(
+                    child: Text(
+                      encourage,
+                      textScaleFactor: 3,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 370,
+                    child: CupertinoSlider(
+                      value: rating,
+                      onChanged: (newRating) {
+                        imageUpdate(newRating);
+                        setState(() => rating = newRating);
+                        encourageText('neutral');
+                        if (rating >= 0) {
+                          setState(() {
+                            encourageText('terrible');
+                          });
+                        }
+                        if (rating > 2) {
+                          setState(() {
+                            encourageText('sad');
+                          });
+                        }
+                        if (rating > 4) {
+                          setState(() {
+                            encourageText('neutral');
+                          });
+                        }
+                        if (rating > 6) {
+                          setState(() {
+                            encourageText('happy');
+                          });
+                        }
+                        if (rating > 8) {
+                          setState(() {
+                            encourageText('great');
+                          });
+                        }
+                      },
+                      min: 0,
+                      max: 10,
+                      divisions: 10,
+                      thumbColor: Colors.black,
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      getProgressIcon(1),
+                      getProgressIcon(2),
+                      getProgressIcon(3),
+                      getProgressIcon(4),
+                    ],
+                  )
                 ],
-              )
-            ],
-          ),
-        ]),
+              ),
+            ),
+          ],
+        ),
         bottomNavigationBar: new Theme(
           data: Theme.of(context).copyWith(
             canvasColor: Colors.deepPurple,
@@ -466,7 +454,6 @@ class QuestionsState extends State<Questions> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String today = DateTime.now().toString().substring(0, 10);
     await prefs.setString('date', today);
-    // print('saved: ' + today);
   }
 
   Future fillQuestions() async {

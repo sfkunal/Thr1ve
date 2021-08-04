@@ -35,8 +35,8 @@ class _ScoreGraphState extends State<ScoreGraph> {
     startIndex = startIndex - 1;
     //todo: render different page if index == -1
     int endIndex = startIndex - 30 < 0 ? 0 : startIndex - 30;
-    for (int i = startIndex; i > endIndex; i--) {
-      // print(i.toString() + 'h');
+
+    for (int i = startIndex; i >= endIndex; i--) {
       final String answerString = prefs.getString('answer_key$i').toString();
       final List<Node> nodes = Node.decode(answerString);
       setState(() {
@@ -51,7 +51,6 @@ class _ScoreGraphState extends State<ScoreGraph> {
     setState(() {
       pastMonth = data;
     });
-    // print(pastMonth.toString());
     return pastMonth;
   }
 
@@ -61,7 +60,6 @@ class _ScoreGraphState extends State<ScoreGraph> {
     await prefs.setDouble('energyAvg', weekAvg(energy));
     await prefs.setDouble('performanceAvg', weekAvg(performance));
     await prefs.setDouble('driveAvg', weekAvg(drive));
-    // print('saved');
   }
 
   void _fill() {
@@ -129,12 +127,6 @@ class _ScoreGraphState extends State<ScoreGraph> {
     }
 
     _saveAvgs();
-    // print('mindset: ' + mindset.toString());
-    // print(weekAvg(mindset));
-
-    // print('energy: ' + energy.toString());
-    // print('performance: ' + performance.toString());
-    // print('drive: ' + drive.toString());
   }
 
   @protected
@@ -201,7 +193,7 @@ class _ScoreGraphState extends State<ScoreGraph> {
                           height: 4,
                         ),
                         const Text(
-                          'Thr1ve Results',
+                          'Check-in Results',
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 32,
@@ -224,171 +216,175 @@ class _ScoreGraphState extends State<ScoreGraph> {
                         const SizedBox(
                           height: 10,
                         ),
+                        Container(
+                          color: Colors.deepPurple.shade300,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Mindset',
+                                textScaleFactor: 2,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blue),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'Energy',
+                                textScaleFactor: 2,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.greenAccent.shade400),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'Performance',
+                                textScaleFactor: 2,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.pink.shade600),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'Drive',
+                                textScaleFactor: 2,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ],
                 ),
               ),
             ),
-            SizedBox(
-                height: 246,
-                child: Column(
-                  children: [
-                    Container(
-                      color: Colors.deepPurple.shade300,
-                      child: Row(
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                        'Your 7-Day Averages:',
+                        style: TextStyle(color: Colors.white),
+                        textScaleFactor: 2.3,
+                      ),
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Mindset',
-                            textScaleFactor: 2,
+                            weekAvg(mindset).toString(),
+                            textScaleFactor: 3,
                             style: TextStyle(
+                                color: Colors.blue,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.blue),
+                                decoration: TextDecoration.underline),
                           ),
                           SizedBox(
-                            width: 10,
+                            width: 20,
                           ),
                           Text(
-                            'Energy',
-                            textScaleFactor: 2,
+                            weekAvg(energy).toString(),
+                            textScaleFactor: 3,
                             style: TextStyle(
+                                color: Colors.greenAccent.shade400,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.greenAccent.shade400),
+                                decoration: TextDecoration.underline),
                           ),
                           SizedBox(
-                            width: 10,
+                            width: 20,
                           ),
                           Text(
-                            'Performance',
-                            textScaleFactor: 2,
+                            weekAvg(performance).toString(),
+                            textScaleFactor: 3,
                             style: TextStyle(
+                                color: Colors.pink.shade600,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.grey),
+                                decoration: TextDecoration.underline),
                           ),
                           SizedBox(
-                            width: 10,
+                            width: 20,
                           ),
                           Text(
-                            'Drive',
-                            textScaleFactor: 2,
+                            weekAvg(drive).toString(),
+                            textScaleFactor: 3,
                             style: TextStyle(
+                                color: Colors.black,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black),
+                                decoration: TextDecoration.underline),
                           ),
                         ],
                       ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      'Your 7-Day Averages:',
-                      style: TextStyle(color: Colors.white),
-                      textScaleFactor: 2.3,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          weekAvg(mindset).toString(),
-                          textScaleFactor: 3,
-                          style: TextStyle(
-                              color: Colors.blue,
-                              fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.underline),
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Text(
-                          weekAvg(energy).toString(),
-                          textScaleFactor: 3,
-                          style: TextStyle(
-                              color: Colors.greenAccent.shade400,
-                              fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.underline),
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Text(
-                          weekAvg(performance).toString(),
-                          textScaleFactor: 3,
-                          style: TextStyle(
-                              color: Colors.grey,
-                              fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.underline),
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Text(
-                          weekAvg(drive).toString(),
-                          textScaleFactor: 3,
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.underline),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      'Thr1ve-Generated Goals:',
-                      style: TextStyle(color: Colors.white),
-                      textScaleFactor: 2.3,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          getGoal(weekAvg(mindset)).toString(),
-                          textScaleFactor: 3,
-                          style: TextStyle(
-                              color: Colors.blue,
-                              fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.underline),
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Text(
-                          getGoal(weekAvg(energy)).toString(),
-                          textScaleFactor: 3,
-                          style: TextStyle(
-                              color: Colors.greenAccent.shade400,
-                              fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.underline),
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Text(
-                          getGoal(weekAvg(performance)).toString(),
-                          textScaleFactor: 3,
-                          style: TextStyle(
-                              color: Colors.grey,
-                              fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.underline),
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Text(
-                          getGoal(weekAvg(drive)).toString(),
-                          textScaleFactor: 3,
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.underline),
-                        ),
-                      ],
-                    ),
-                  ],
-                ))
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        'Thr1ve-Generated Goals:',
+                        style: TextStyle(color: Colors.white),
+                        textScaleFactor: 2.3,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            getGoal(weekAvg(mindset)).toString(),
+                            textScaleFactor: 3,
+                            style: TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text(
+                            getGoal(weekAvg(energy)).toString(),
+                            textScaleFactor: 3,
+                            style: TextStyle(
+                                color: Colors.greenAccent.shade400,
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text(
+                            getGoal(weekAvg(performance)).toString(),
+                            textScaleFactor: 3,
+                            style: TextStyle(
+                                color: Colors.pink.shade600,
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text(
+                            getGoal(weekAvg(drive)).toString(),
+                            textScaleFactor: 3,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),
@@ -520,7 +516,7 @@ class _ScoreGraphState extends State<ScoreGraph> {
       spots: toList(performance),
       isCurved: true,
       colors: [
-        Colors.grey,
+        Colors.pink.shade600,
       ],
       barWidth: 3,
       isStrokeCapRound: true,

@@ -15,18 +15,13 @@ class _StatisticsState extends State<Statistics> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.deepPurple,
-      appBar: AppBar(
-        title: Image.asset(
-          logo,
-          scale: 3.2,
+        backgroundColor: Colors.deepPurple,
+        appBar: AppBar(
+          title: Image.asset(
+            logo,
+            scale: 3.2,
+          ),
         ),
-      ),
-      body: Center(
-        child: Column(
-          children: [ScoreGraph()],
-        ),
-      ),
-    );
+        body: ScoreGraph());
   }
 }
