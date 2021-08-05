@@ -584,7 +584,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 if (result == true) {
                   setState(() {
                     isSameDay = true;
-                    accountLevel = accountLevel + 1;
+                    accountLevel = 148;
+                    // accountLevel = accountLevel + 1;
                     myFrameLevel = accountLevel * 5;
                   });
                 }

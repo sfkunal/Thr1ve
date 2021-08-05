@@ -478,7 +478,7 @@ class _ScoreGraphState extends State<ScoreGraph> {
   List<FlSpot> toList(List<double> lst) {
     List<FlSpot> answers = [];
     for (int i = 0; i < lst.length; i++) {
-      if (i < 28) {
+      if (i < 30) {
         answers.add(new FlSpot(i.toDouble(), lst[i]));
       }
     }
